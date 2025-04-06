@@ -41,6 +41,9 @@
 `define DL2block_Log2 $clog2(`DL2block)
 `define DL2subblocks_Log2 $clog2(`DL2subblocks)
 
+`define DL1LRUMAX ((1 << `DL1waysLog2)-1)
+`define DL2LRUMAX ((1 << `DL2waysLog2)-1)
+
 
 module IL1Cache (clk, reset, PC, instr, ready,
 	en, PCB, instrB, readyB);
@@ -143,7 +146,7 @@ module DL1cache (clk, reset,cycles,
     reg [`DL1ways-1:0] valid [`DL1sets-1:0];
     // reg [`DL1ways-1:0] nru_bit [`DL1sets-1:0];
 	// this has changed to 2-bit LRU replacement policy
-	reg [1:0] lru_state [`DL1sets-1:0][`DL1ways-1:0];
+	reg [`DL1waysLog2-1:0] lru_state [`DL1sets-1:0][`DL1ways-1:0];
 
     wire [`DADDR_bits-(`VLEN_Log2-3)-`DL1setsLog2-1:0] tag; 
     assign tag = addr>>(`DL1setsLog2+(`VLEN_Log2-3));
@@ -245,7 +248,7 @@ module DL1cache (clk, reset,cycles,
 	
 	assign rdata_updated=(hitw)?wdata:rdata[hit_way];
 	reg full_line_write_miss;
-	reg [1:0] a;
+	reg [`DL1waysLog2-1:0] a;
 	reg [61:0] hit_count;
 	reg [61:0] access_count;
 
@@ -255,7 +258,7 @@ module DL1cache (clk, reset,cycles,
 	always @( posedge clk ) begin
 		// $display("waiting %d", waiting);
 		if (reset) begin
-			// $display("reset %d", reset); 
+			// $display("reset %d", reset);
 				for (i = 0; i < `DL1sets; i = i + 1) begin
             		dirty[i]<=0;
 					valid[i]<=0;
@@ -293,36 +296,26 @@ module DL1cache (clk, reset,cycles,
 					hit=1;
 					candidate=j_;
 					miss=0;
-					// $display("hit!");
 				end
-				if (access && (lru_state[set][j_]==2'b11) && (!zero_found) && (!hit)) begin
+				if (access && (lru_state[set][j_]==`DL1LRUMAX) && (!zero_found) && (!hit)) begin
 					candidate=j_;
 					zero_found=1;
-					// $display("miss! Way %d, LRU %2b; way %d, LRU %2b; Way %d, LRU %2b; Way %d, LRU %2b", 0, lru_state[set][0], 1, lru_state[set][1], 2, lru_state[set][2], 3, lru_state[set][3]);
-					// $display("way %d, LRU %2b", 0, lru_state[set][0]);
-					// $display("way %d, LRU %2b", 1, lru_state[set][1]);
-					// $display("way %d, LRU %2b", 2, lru_state[set][2]);
-					// $display("way %d, LRU %2b", 3, lru_state[set][3]);
-					
 				end
 			end
-
-			// $display("LRU Access hit %d in set %d way %d; Way %d, LRU %2b; way %d, LRU %2b; Way %d, LRU %2b; Way %d, LRU %2b", hit, set, candidate, 0, lru_state[set][0], 1, lru_state[set][1], 2, lru_state[set][2], 3, lru_state[set][3]);
-
+			
+			// $display(`DL1LRUMAX);
 			if (access) begin
 				a = lru_state[set][candidate]; 
 				for (j_ = 0; j_ < `DL1ways; j_ = j_ + 1) begin
 					if (j_ == candidate) begin
-						// $display("previous lru_candidate %d", a);
-						lru_state[set][j_] = 2'b00;  // Immediate update
+						lru_state[set][j_] = 2'b00;
 					end else if (lru_state[set][j_] < a) begin
 						lru_state[set][j_] = lru_state[set][j_] + 1;
 					end
-					// $display("way %d, LRU %2b", j_, lru_state[set][j_]);
 				end
-				// $display("LRU Access hit %d in set %d way %d;  %2b %2b %2b %2b", hit, set, candidate, lru_state[set][0], lru_state[set][1],lru_state[set][2], lru_state[set][3]);
+				// $display("%d %d %d %d %d %d %d %d", lru_state[set][0], lru_state[set][1],lru_state[set][2], lru_state[set][3], lru_state[set][4], lru_state[set][5], lru_state[set][6], lru_state[set][7]);
+				// $display(lru_state[set][0]," ",lru_state[set][1]," ",lru_state[set][2]," ",lru_state[set][3]," ",lru_state[set][4]," ", lru_state[set][5]," ",lru_state[set][6]," ",lru_state[set][7]);
 			end
-
 			if (hit) begin
 				hit_count<=hit_count+1;
 				// hit_rate<=(hit_count*100)/access_count;
@@ -527,7 +520,7 @@ module DL2cache (clk, reset,
     reg [`DL2ways-1:0] dirty [`DL2sets-1:0];
     reg [`DL2ways-1:0] valid [`DL2sets-1:0];
     // reg [`DL2ways-1:0] nru_bit [`DL2sets-1:0];
-	reg [1:0] lru_state [`DL2sets-1:0][`DL2ways-1:0];
+	reg [`DL2waysLog2-1:0] lru_state [`DL2sets-1:0][`DL2ways-1:0];
 
     wire [`DADDR_bits-(`DL2block_Log2-3)-`DL2setsLog2-1:0] tag; 
     assign tag = addr>>(`DL2setsLog2+(`DL2block_Log2-3));
@@ -628,7 +621,7 @@ module DL2cache (clk, reset,
 	reg [`DL2waysLog2-1:0] flush_way;
 	assign doutB=rdata[(flushing&&!waiting)?flush_way:miss_way];
 	reg hitw_saved;	
-	reg [1:0] a;
+	reg [`DL2waysLog2-1:0] a;
 	reg [61:0] hit_count;
 	reg [61:0] access_count;
 
@@ -674,7 +667,7 @@ module DL2cache (clk, reset,
 					candidate=j_;
 					miss=0;
 				end
-				if (access && (lru_state[set][j_]==2'b11) && (!zero_found) && (!hit)) begin
+				if (access && (lru_state[set][j_]==`DL2LRUMAX) && (!zero_found) && (!hit)) begin
 					candidate=j_;
 					zero_found=1;
 				end
@@ -682,10 +675,6 @@ module DL2cache (clk, reset,
 			
 			if (access) begin
 			access_count<=access_count+1;
-			// 	if (`DEB)$display("L2 Access hit %d set %d", hit, set);
-			// 	if ((nru_bit[set] /*|(1<<candidate)*/)=={`DL2ways{1'b1}})
-			// 		nru_bit[set]<=0;
-			// 	nru_bit[set][candidate]<=1;
 			end
 			if (access) begin
 				a = lru_state[set][candidate]; 
@@ -696,8 +685,7 @@ module DL2cache (clk, reset,
 					end else if (lru_state[set][j_] < a) begin
 						lru_state[set][j_] = lru_state[set][j_] + 1;
 					end
-					// $display("way %d, LRU %2b", j_, lru_state[set][j_]);
-					// $display("LRU Access hit %d in set %d way %d; Way %d, LRU %2b; way %d, LRU %2b; Way %d, LRU %2b; Way %d, LRU %2b", hit, set, candidate, 0, lru_state[set][0], 1, lru_state[set][1], 2, lru_state[set][2], 3, lru_state[set][3]);
+					// $display("%d %d %d %d %d %d %d %d", lru_state[set][0], lru_state[set][1],lru_state[set][2], lru_state[set][3], lru_state[set][4], lru_state[set][5], lru_state[set][6], lru_state[set][7]);
 				end
 			end
 			
