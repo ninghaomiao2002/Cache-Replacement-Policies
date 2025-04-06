@@ -1,11 +1,11 @@
 // In powers of 2 above 1
 `define IL1sets 64
 
-`define DL1sets 16
-`define DL1ways 4
+`define DL1sets 32
+`define DL1ways 8
 
-`define DL2sets 16
-`define DL2ways 4
+`define DL2sets 32
+`define DL2ways 8
 `define DL2block 16384
 `define DL2subblocks 32
 
@@ -252,7 +252,7 @@ module DL1cache (clk, reset,cycles,
 			if (!hit) begin
 				found_candidate = 0;
 				// candidate = 0;
-				for (i = 0; i < 3 && !found_candidate; i = i + 1) begin
+				for (i = 0; i < `DL1ways && !found_candidate; i = i + 1) begin
 					for (j_ = 0; j_ < `DL1ways && !found_candidate; j_ = j_ + 1) begin
 						if (srrip_state[set][j_] == 2'b11) begin  
 							candidate = j_;
@@ -278,7 +278,7 @@ module DL1cache (clk, reset,cycles,
 			if (hit) begin
 				hit_count<=hit_count+1;
 				// hit_rate<=(hit_count*100)/access_count;
-				$display("L1 hit_count %d, access_count %d",hit_count, access_count);
+				// $display("L1 hit_count %d, access_count %d",hit_count, access_count);
 				
 				for (j_ = 0; j_ < `DL1ways; j_ = j_ + 1) begin
 					if (j_ == candidate) begin
@@ -636,7 +636,7 @@ module DL2cache (clk, reset,
 			end
 			if (!hit) begin
 				found_candidate = 0;
-				for (i = 0; i < 3 && !found_candidate; i = i + 1) begin
+				for (i = 0; i < `DL2ways && !found_candidate; i = i + 1) begin
 					// Search for a block with RRPV = 3
 					for (j_ = 0; j_ < `DL2ways && !found_candidate; j_ = j_ + 1) begin
 						if (srrip_state[set][j_] == 2'b11) begin 
@@ -660,7 +660,7 @@ module DL2cache (clk, reset,
 			if (hit) begin
 				hit_count<=hit_count+1;
 				// hit_rate<=(hit_count*100)/access_count;
-				$display("L2 hit_count %d, access_count %d",hit_count, access_count);
+				// $display("L2 hit_count %d, access_count %d",hit_count, access_count);
 				if (`DEB)$display("hit set %d tag %h way %h",set, tag, candidate);
 				
 				for (j_ = 0; j_ < `DL2ways; j_ = j_ + 1) begin

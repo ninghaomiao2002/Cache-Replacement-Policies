@@ -2,10 +2,10 @@
 `define IL1sets 64
 
 `define DL1sets 32
-`define DL1ways 4
+`define DL1ways 8
 
 `define DL2sets 32
-`define DL2ways 4
+`define DL2ways 8
 `define DL2block 16384 // 512-byte
 `define DL2subblocks 32
 
@@ -508,10 +508,6 @@ module DL1cache (clk, reset,cycles,
 	reg [61:0] hit_count;
 	reg [61:0] access_count;
 	reg found_candidate;
-	// reg [7:0] hit_rate;
-
-
-
 
 	always @( posedge clk ) begin
 		// $display("waiting %d", waiting);
@@ -564,7 +560,7 @@ module DL1cache (clk, reset,cycles,
 				// $display("Before Access hit %d in set %d way %d;srrip_state %2b %2b %2b %2b", hit, set, candidate, srrip_state[set][0], srrip_state[set][1], srrip_state[set][2], srrip_state[set][3]);
 				found_candidate = 0;
 				// candidate = 0;
-				for (i = 0; i < 3 && !found_candidate; i = i + 1) begin
+				for (i = 0; i < `DL1ways && !found_candidate; i = i + 1) begin
 					for (j_ = 0; j_ < `DL1ways && !found_candidate; j_ = j_ + 1) begin
 						if (srrip_state[set][j_] == 2'b11) begin  
 							candidate = j_;
@@ -950,7 +946,7 @@ module DL2cache (clk, reset,
 			end
 			if (!hit) begin
 				found_candidate = 0;
-				for (i = 0; i < 3 && !found_candidate; i = i + 1) begin
+				for (i = 0; i < `DL2ways && !found_candidate; i = i + 1) begin
 					// Search for a block with RRPV = 3
 					for (j_ = 0; j_ < `DL2ways && !found_candidate; j_ = j_ + 1) begin
 						if (srrip_state[set][j_] == 2'b11) begin 

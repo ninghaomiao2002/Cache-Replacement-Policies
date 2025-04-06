@@ -25,10 +25,10 @@
 `define IL1sets 64
 
 `define DL1sets 32
-`define DL1ways 4
+`define DL1ways 8
 
 `define DL2sets 32
-`define DL2ways 4
+`define DL2ways 8
 `define DL2block 16384
 `define DL2subblocks 32
 
