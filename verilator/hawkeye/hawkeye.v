@@ -465,7 +465,7 @@ module optgen_DL2
 (
     input wire clk,
     input wire reset,
-    input wire [`DL1setsLog2-1:0] set,
+    input wire [`DL2setsLog2-1:0] set,
     input reg [4:0] curr_timestep,
     input reg [4:0] last_timestep,
     input reg is_reuse, 
@@ -473,7 +473,7 @@ module optgen_DL2
 	// input wire [`IADDR_bits-1:0] pc,      
     output reg should_cache          
 );
-    reg [`OCC_WIDTH-1:0] occupancy_vector [`DL1sets-1:0][`VECTOR_SIZE-1:0];
+    reg [`OCC_WIDTH-1:0] occupancy_vector [`DL2sets-1:0][`VECTOR_SIZE-1:0];
     integer s, q, q_idx;
 	reg [4:0] interval;
 	// function [7:0] hash;
@@ -488,7 +488,7 @@ module optgen_DL2
     // assign index = hash(pc);
     always @(posedge clk or posedge reset) begin
         if (reset) begin
-            for (s = 0; s < `DL1sets; s = s + 1)
+            for (s = 0; s < `DL2sets; s = s + 1)
                 for (q = 0; q < `VECTOR_SIZE; q = q + 1)
                     occupancy_vector[s][q] = 0;
             should_cache = 1;
@@ -503,26 +503,26 @@ module optgen_DL2
 				// $display("%d", interval);
 				// $display("%d %d", last_timestep, curr_timestep);
 				for (q_idx = last_timestep; q_idx != curr_timestep; q_idx = (q_idx + 1) % `VECTOR_SIZE) begin
-					if (occupancy_vector[set][q_idx] >= `DL1ways) begin
+					if (occupancy_vector[set][q_idx] >= `DL2ways) begin
 						should_cache = 0;
 						// $display("ov bigger than ways");
 					end
 				end
 				if (should_cache) begin
 					for (q_idx = last_timestep; q_idx != curr_timestep; q_idx = (q_idx + 1) % `VECTOR_SIZE) begin
-						if (occupancy_vector[set][q_idx] < `DL1ways) begin
+						if (occupancy_vector[set][q_idx] < `DL2ways) begin
 							occupancy_vector[set][q_idx] = occupancy_vector[set][q_idx] + 1;
 							// $display("ov increment");
 						end
 					end
 				end
-				// $display("DL1: should_cache: ",should_cache);
+				// $display("DL2: should_cache: ",should_cache);
 			end else begin
 				should_cache = 0;
 				occupancy_vector[set][curr_timestep] = 0;
 				// $display("ov not reused");
 			end
-			// $display("DL1: should_cache: ",should_cache, " ", pc);
+			// $display("DL2: should_cache: ",should_cache, " ", pc);
 			
 		end
 		
@@ -1371,12 +1371,12 @@ module DL2cache (clk, reset, cycles,
                 //     curr_timestep <= curr_timestep + 1;
                 // end
 				// $display("last_access_timestep %d", last_access_timestep[set][tag]);
-				if (`DEB)$display("DL1 Access hit %d set %d", hit, set);
+				if (`DEB)$display("DL2 Access hit %d set %d", hit, set);
                 hit = 0;
                 miss = 1;
                 candidate = 0;
                 
-                for (j_ = 0; j_ < `DL1ways; j_ = j_ + 1) begin
+                for (j_ = 0; j_ < `DL2ways; j_ = j_ + 1) begin
                     if ((tag_array[set][j_] == tag) && valid[set][j_]) begin
                         hit = 1;
                         miss = 0;
@@ -1386,7 +1386,7 @@ module DL2cache (clk, reset, cycles,
 
                 if (!hit) begin
                         max_rrpv = 0;
-                        for (j_ = 0; j_ < `DL1ways; j_ = j_ + 1) begin
+                        for (j_ = 0; j_ < `DL2ways; j_ = j_ + 1) begin
                             if (rrpv[set][j_] >= max_rrpv) begin
                                 max_rrpv = rrpv[set][j_];
                                 candidate = j_;
@@ -1396,10 +1396,10 @@ module DL2cache (clk, reset, cycles,
 
                 if (should_cache) begin
 					train_up <= 1;
-					// $display("DL1: train_up");
+					// $display("DL2: train_up");
 				end else begin
 					train_down <= 1;
-					// $display("DL1: train_down");
+					// $display("DL2: train_down");
 				end
 
                 if (is_sampled_set) begin
