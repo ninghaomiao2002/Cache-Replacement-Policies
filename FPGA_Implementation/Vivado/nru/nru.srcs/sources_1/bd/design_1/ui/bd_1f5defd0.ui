@@ -1,0 +1,41 @@
+{
+   "ActiveEmotionalView":"Default View",
+   "Default View_ScaleFactor":"0.986061",
+   "Default View_TopLeft":"427,48",
+   "ExpandedHierarchyInLayout":"",
+   "guistr":"# # String gsaved with Nlview 7.5.8 2022-09-21 7111 VDI=41 GEI=38 GUI=JA:10.0
+#  -string -flagsOSRD
+preplace inst axi_interconnect_0 -pg 1 -lvl 2 -x 920 -y 220 -defaultsOSRD
+preplace inst zynq_ultra_ps_e_0 -pg 1 -lvl 1 -x 330 -y 110 -defaultsOSRD
+preplace inst proc_sys_reset_0 -pg 1 -lvl 1 -x 330 -y 300 -defaultsOSRD
+preplace inst SAXI_ip_0 -pg 1 -lvl 3 -x 1378 -y 290 -defaultsOSRD
+preplace inst MAXI_ip_0 -pg 1 -lvl 3 -x 1378 -y 540 -defaultsOSRD
+preplace netloc MAXI_ip_0_accR 1 2 2 1178 680 1560
+preplace netloc MAXI_ip_0_accW 1 2 2 1158 100 1630
+preplace netloc MAXI_ip_0_dinB 1 2 2 1178 120 1620
+preplace netloc MAXI_ip_0_dinBstrobe 1 2 2 1168 110 1570
+preplace netloc MAXI_ip_0_maxi_debug 1 2 2 1188 130 1610
+preplace netloc MAXI_ip_0_readyB 1 2 2 1118 60 1580
+preplace netloc SAXI_ip_0_addrB 1 2 2 1128 70 1560
+preplace netloc SAXI_ip_0_doutB 1 2 2 1148 90 1640
+preplace netloc SAXI_ip_0_doutBstrobe 1 2 2 1138 80 1600
+preplace netloc SAXI_ip_0_enB 1 2 2 1198 140 1550
+preplace netloc SAXI_ip_0_reset 1 2 2 1208 150 1590
+preplace netloc SAXI_ip_0_weB 1 2 2 1208 670 1600
+preplace netloc proc_sys_reset_0_interconnect_aresetn 1 1 1 770 170n
+preplace netloc proc_sys_reset_0_peripheral_aresetn 1 1 2 760 50 1098J
+preplace netloc zynq_ultra_ps_e_0_pl_clk0 1 0 3 20 20 750 30 1108
+preplace netloc zynq_ultra_ps_e_0_pl_resetn0 1 0 2 10 200 640J
+preplace netloc MAXI_ip_0_M_AXI 1 1 3 770J 40 N 40 1650
+preplace netloc axi_interconnect_0_M00_AXI 1 2 1 N 210
+preplace netloc axi_interconnect_0_M01_AXI 1 0 3 0 10 NJ 10 1070
+preplace netloc zynq_ultra_ps_e_0_M_AXI_HPM0_LPD 1 1 1 650 90n
+levelinfo -pg 1 -20 330 920 1378 1670
+pagesize -pg 1 -db -bbox -sgen -20 0 2620 780
+"
+}
+{
+   "da_axi4_cnt":"5",
+   "da_clkrst_cnt":"3",
+   "da_zynq_ultra_ps_e_cnt":"1"
+}
