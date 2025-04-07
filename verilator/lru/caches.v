@@ -421,8 +421,6 @@ module DL1cache (clk, reset,cycles,
 	reg [`DADDR_bits-(`VLEN_Log2-3)-`DL1setsLog2-1:0] tag_array [`DL1sets-1:0][`DL1ways-1:0];
     reg [`DL1ways-1:0] dirty [`DL1sets-1:0];
     reg [`DL1ways-1:0] valid [`DL1sets-1:0];
-    // reg [`DL1ways-1:0] nru_bit [`DL1sets-1:0];
-	// this has changed to 2-bit LRU replacement policy
 	reg [`DL1waysLog2-1:0] lru_state [`DL1sets-1:0][`DL1ways-1:0];
 
     wire [`DADDR_bits-(`VLEN_Log2-3)-`DL1setsLog2-1:0] tag; 
@@ -468,7 +466,7 @@ module DL1cache (clk, reset,cycles,
             
     genvar j; integer j_;
     
-    reg zero_found;
+    // reg zero_found;
 
     
     for (j=0;j<`DL1ways;j=j+1) begin   
@@ -542,7 +540,7 @@ module DL1cache (clk, reset,cycles,
             		dirty[i]<=0;
 					valid[i]<=0;
 					for (j_ = 0; j_ < `DL1ways; j_ = j_ + 1) begin
-                		lru_state[i][j_] <= 2'b00 + j_;
+                		lru_state[i][j_] <= j_;
 						// $display("set %d way %d lru %2b", i, j_, lru_state[i][j_]);
             		end
         		end
@@ -565,7 +563,8 @@ module DL1cache (clk, reset,cycles,
 			
 			if (en) roffset<=addr[(`VLEN_Log2-3)-1:2];	
 			
-			hit=0; miss=access; zero_found=0;
+			hit=0; miss=access; 
+			// zero_found=0;
 			if (access) begin
 				access_count<=access_count+1;
 			end
@@ -576,9 +575,9 @@ module DL1cache (clk, reset,cycles,
 					candidate=j_;
 					miss=0;
 				end
-				if (access && (lru_state[set][j_]==`DL1LRUMAX) && (!zero_found) && (!hit)) begin
+				if (access && (lru_state[set][j_]==`DL1LRUMAX) && /*(!zero_found) &&*/ (!hit)) begin
 					candidate=j_;
-					zero_found=1;
+					// zero_found=1;
 				end
 			end
 
@@ -587,7 +586,7 @@ module DL1cache (clk, reset,cycles,
 				a = lru_state[set][candidate]; 
 				for (j_ = 0; j_ < `DL1ways; j_ = j_ + 1) begin
 					if (j_ == candidate) begin
-						lru_state[set][j_] = 2'b00; 
+						lru_state[set][j_] = 0; 
 					end else if (lru_state[set][j_] < a) begin
 						lru_state[set][j_] = lru_state[set][j_] + 1;
 					end
@@ -854,7 +853,7 @@ module DL2cache (clk, reset,
             
     genvar j; integer j_;
     
-    reg zero_found;        
+    // reg zero_found;        
 
     for (j=0;j<`DL2ways;j=j+1) begin   
    	
@@ -916,7 +915,7 @@ module DL2cache (clk, reset,
 				valid[i]<=0;
 				for (j_ = 0; j_ < `DL2ways; j_ = j_ + 1) 
 				begin
-                		lru_state[i][j_] <= 2'b00 + j_;
+                		lru_state[i][j_] <= j_;
 						// $display("set %d way %d lru %2b", i, j_, lru_state[i][j_]);
 				end
 				//tag_array[i]<=0;
@@ -943,16 +942,17 @@ module DL2cache (clk, reset,
 			if (en) roffset<=addr[(`DL2block_Log2-`DL2subblocks_Log2-3)-1:(`VLEN_Log2-3)];
 			
 			
-			hit=0; miss=access; zero_found=0;
+			hit=0; miss=access; 
+			// zero_found=0;
 			for (j_=0;j_<`DL2ways;j_=j_+1) begin
 				if (access && ((tag_array[set][j_]==tag) && valid[set][j_])) begin
 					hit=1;
 					candidate=j_;
 					miss=0;
 				end
-				if (access && (lru_state[set][j_]==`DL2LRUMAX) && (!zero_found) && (!hit)) begin
+				if (access && (lru_state[set][j_]==`DL2LRUMAX) /*&& (!zero_found)*/ && (!hit)) begin
 					candidate=j_;
-					zero_found=1;
+					// zero_found=1;
 				end
 			end	
 			
@@ -964,7 +964,7 @@ module DL2cache (clk, reset,
 				for (j_ = 0; j_ < `DL2ways; j_ = j_ + 1) begin
 					if (j_ == candidate) begin
 						// $display("previous lru_candidate %d", a);
-						lru_state[set][j_] = 2'b00;  // Immediate update
+						lru_state[set][j_] = 0;  // Immediate update
 					end else if (lru_state[set][j_] < a) begin
 						lru_state[set][j_] = lru_state[set][j_] + 1;
 					end
