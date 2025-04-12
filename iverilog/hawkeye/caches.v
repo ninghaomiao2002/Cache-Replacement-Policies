@@ -175,7 +175,7 @@ module optgen_DL2
     input wire [`DL2setsLog2-1:0] set,
     input reg [4:0] curr_timestep,
     input reg [4:0] last_timestep,
-    input reg is_reuse, 
+    input reg is_reuse,
 	input wire access,
 	// input wire [`IADDR_bits-1:0] pc,      
     output reg should_cache          

@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2023.2 (win64) Build 4029153 Fri Oct 13 20:14:34 MDT 2023
-| Date         : Sat Apr  5 14:34:42 2025
+| Date         : Thu Apr 10 15:39:41 2025
 | Host         : Desktop running 64-bit major release  (build 9200)
 | Command      : report_methodology -file design_1_wrapper_methodology_drc_routed.rpt -pb design_1_wrapper_methodology_drc_routed.pb -rpx design_1_wrapper_methodology_drc_routed.rpx
 | Design       : design_1_wrapper
@@ -23,12 +23,12 @@ Table of Contents
           Floorplan: design_1
       Design limits: <entire design considered>
              Max violations: <unlimited>
-             Violations found: 46
+             Violations found: 41
 +-----------+----------+--------------------------------+------------+
 | Rule      | Severity | Description                    | Violations |
 +-----------+----------+--------------------------------+------------+
 | LUTAR-1   | Warning  | LUT drives async reset alert   | 3          |
-| TIMING-20 | Warning  | Non-clocked latch              | 42         |
+| TIMING-20 | Warning  | Non-clocked latch              | 37         |
 | LATCH-1   | Advisory | Existing latches in the design | 1          |
 +-----------+----------+--------------------------------+------------+
 
@@ -279,34 +279,9 @@ Non-clocked latch
 The latch design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/set_real_reg[4] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/set_real_reg[4]/G is not reached by a timing clock
 Related violations: <none>
 
-TIMING-20#38 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[0] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[0]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#39 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[1] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[1]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#40 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[2] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[2]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#41 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[3] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[3]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#42 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[4] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[4]/G is not reached by a timing clock
-Related violations: <none>
-
 LATCH-1#1 Advisory
 Existing latches in the design  
-There are 42 latches found in the design. Inferred latches are often the result of HDL coding mistakes, such as incomplete if or case statements.
+There are 37 latches found in the design. Inferred latches are often the result of HDL coding mistakes, such as incomplete if or case statements.
 Related violations: <none>
 
 

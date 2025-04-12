@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2023.2 (win64) Build 4029153 Fri Oct 13 20:14:34 MDT 2023
-| Date         : Sat Apr  5 14:17:05 2025
+| Date         : Thu Apr 10 11:41:12 2025
 | Host         : Desktop running 64-bit major release  (build 9200)
 | Command      : report_methodology -file design_1_wrapper_methodology_drc_routed.rpt -pb design_1_wrapper_methodology_drc_routed.pb -rpx design_1_wrapper_methodology_drc_routed.rpx
 | Design       : design_1_wrapper
@@ -23,178 +23,17 @@ Table of Contents
           Floorplan: design_1
       Design limits: <entire design considered>
              Max violations: <unlimited>
-             Violations found: 112
-+-----------+------------------+--------------------------------+------------+
-| Rule      | Severity         | Description                    | Violations |
-+-----------+------------------+--------------------------------+------------+
-| TIMING-17 | Critical Warning | Non-clocked sequential cell    | 32         |
-| LUTAR-1   | Warning          | LUT drives async reset alert   | 3          |
-| TIMING-20 | Warning          | Non-clocked latch              | 76         |
-| LATCH-1   | Advisory         | Existing latches in the design | 1          |
-+-----------+------------------+--------------------------------+------------+
+             Violations found: 41
++-----------+----------+--------------------------------+------------+
+| Rule      | Severity | Description                    | Violations |
++-----------+----------+--------------------------------+------------+
+| LUTAR-1   | Warning  | LUT drives async reset alert   | 3          |
+| TIMING-20 | Warning  | Non-clocked latch              | 37         |
+| LATCH-1   | Advisory | Existing latches in the design | 1          |
++-----------+----------+--------------------------------+------------+
 
 2. REPORT DETAILS
 -----------------
-TIMING-17#1 Critical Warning
-Non-clocked sequential cell  
-The clock pin design_1_i/SAXI_ip_0/inst/c0/c0/alu2/result_reg[0]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#2 Critical Warning
-Non-clocked sequential cell  
-The clock pin design_1_i/SAXI_ip_0/inst/c0/c0/alu2/result_reg[10]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#3 Critical Warning
-Non-clocked sequential cell  
-The clock pin design_1_i/SAXI_ip_0/inst/c0/c0/alu2/result_reg[11]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#4 Critical Warning
-Non-clocked sequential cell  
-The clock pin design_1_i/SAXI_ip_0/inst/c0/c0/alu2/result_reg[12]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#5 Critical Warning
-Non-clocked sequential cell  
-The clock pin design_1_i/SAXI_ip_0/inst/c0/c0/alu2/result_reg[13]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#6 Critical Warning
-Non-clocked sequential cell  
-The clock pin design_1_i/SAXI_ip_0/inst/c0/c0/alu2/result_reg[14]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#7 Critical Warning
-Non-clocked sequential cell  
-The clock pin design_1_i/SAXI_ip_0/inst/c0/c0/alu2/result_reg[15]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#8 Critical Warning
-Non-clocked sequential cell  
-The clock pin design_1_i/SAXI_ip_0/inst/c0/c0/alu2/result_reg[16]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#9 Critical Warning
-Non-clocked sequential cell  
-The clock pin design_1_i/SAXI_ip_0/inst/c0/c0/alu2/result_reg[17]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#10 Critical Warning
-Non-clocked sequential cell  
-The clock pin design_1_i/SAXI_ip_0/inst/c0/c0/alu2/result_reg[18]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#11 Critical Warning
-Non-clocked sequential cell  
-The clock pin design_1_i/SAXI_ip_0/inst/c0/c0/alu2/result_reg[19]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#12 Critical Warning
-Non-clocked sequential cell  
-The clock pin design_1_i/SAXI_ip_0/inst/c0/c0/alu2/result_reg[1]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#13 Critical Warning
-Non-clocked sequential cell  
-The clock pin design_1_i/SAXI_ip_0/inst/c0/c0/alu2/result_reg[20]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#14 Critical Warning
-Non-clocked sequential cell  
-The clock pin design_1_i/SAXI_ip_0/inst/c0/c0/alu2/result_reg[21]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#15 Critical Warning
-Non-clocked sequential cell  
-The clock pin design_1_i/SAXI_ip_0/inst/c0/c0/alu2/result_reg[22]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#16 Critical Warning
-Non-clocked sequential cell  
-The clock pin design_1_i/SAXI_ip_0/inst/c0/c0/alu2/result_reg[23]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#17 Critical Warning
-Non-clocked sequential cell  
-The clock pin design_1_i/SAXI_ip_0/inst/c0/c0/alu2/result_reg[24]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#18 Critical Warning
-Non-clocked sequential cell  
-The clock pin design_1_i/SAXI_ip_0/inst/c0/c0/alu2/result_reg[25]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#19 Critical Warning
-Non-clocked sequential cell  
-The clock pin design_1_i/SAXI_ip_0/inst/c0/c0/alu2/result_reg[26]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#20 Critical Warning
-Non-clocked sequential cell  
-The clock pin design_1_i/SAXI_ip_0/inst/c0/c0/alu2/result_reg[27]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#21 Critical Warning
-Non-clocked sequential cell  
-The clock pin design_1_i/SAXI_ip_0/inst/c0/c0/alu2/result_reg[28]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#22 Critical Warning
-Non-clocked sequential cell  
-The clock pin design_1_i/SAXI_ip_0/inst/c0/c0/alu2/result_reg[29]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#23 Critical Warning
-Non-clocked sequential cell  
-The clock pin design_1_i/SAXI_ip_0/inst/c0/c0/alu2/result_reg[2]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#24 Critical Warning
-Non-clocked sequential cell  
-The clock pin design_1_i/SAXI_ip_0/inst/c0/c0/alu2/result_reg[30]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#25 Critical Warning
-Non-clocked sequential cell  
-The clock pin design_1_i/SAXI_ip_0/inst/c0/c0/alu2/result_reg[31]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#26 Critical Warning
-Non-clocked sequential cell  
-The clock pin design_1_i/SAXI_ip_0/inst/c0/c0/alu2/result_reg[3]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#27 Critical Warning
-Non-clocked sequential cell  
-The clock pin design_1_i/SAXI_ip_0/inst/c0/c0/alu2/result_reg[4]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#28 Critical Warning
-Non-clocked sequential cell  
-The clock pin design_1_i/SAXI_ip_0/inst/c0/c0/alu2/result_reg[5]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#29 Critical Warning
-Non-clocked sequential cell  
-The clock pin design_1_i/SAXI_ip_0/inst/c0/c0/alu2/result_reg[6]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#30 Critical Warning
-Non-clocked sequential cell  
-The clock pin design_1_i/SAXI_ip_0/inst/c0/c0/alu2/result_reg[7]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#31 Critical Warning
-Non-clocked sequential cell  
-The clock pin design_1_i/SAXI_ip_0/inst/c0/c0/alu2/result_reg[8]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#32 Critical Warning
-Non-clocked sequential cell  
-The clock pin design_1_i/SAXI_ip_0/inst/c0/c0/alu2/result_reg[9]/C is not reached by a timing clock
-Related violations: <none>
-
 LUTAR-1#1 Warning
 LUT drives async reset alert  
 LUT cell design_1_i/axi_interconnect_0/m00_couplers/auto_ds/inst/gen_downsizer.gen_simple_downsizer.axi_downsizer_inst/USE_READ.read_addr_inst/cmd_queue/inst/fifo_gen_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/gpregsm1.curr_fwft_state[1]_i_2, with 2 or more inputs, drives asynchronous preset/clear pin(s) design_1_i/axi_interconnect_0/m00_couplers/auto_ds/inst/gen_downsizer.gen_simple_downsizer.axi_downsizer_inst/USE_READ.read_addr_inst/cmd_queue/inst/fifo_gen_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.rd/gr1.gr1_int.rfwft/gpregsm1.user_valid_reg/CLR,
@@ -417,227 +256,32 @@ Related violations: <none>
 
 TIMING-20#33 Warning
 Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc1/set_real_reg[0] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc1/set_real_reg[0]/G is not reached by a timing clock
+The latch design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/set_real_reg[0] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/set_real_reg[0]/G is not reached by a timing clock
 Related violations: <none>
 
 TIMING-20#34 Warning
 Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc1/set_real_reg[1] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc1/set_real_reg[1]/G is not reached by a timing clock
+The latch design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/set_real_reg[1] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/set_real_reg[1]/G is not reached by a timing clock
 Related violations: <none>
 
 TIMING-20#35 Warning
 Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc1/set_real_reg[2] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc1/set_real_reg[2]/G is not reached by a timing clock
+The latch design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/set_real_reg[2] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/set_real_reg[2]/G is not reached by a timing clock
 Related violations: <none>
 
 TIMING-20#36 Warning
 Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc1/set_real_reg[3] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc1/set_real_reg[3]/G is not reached by a timing clock
+The latch design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/set_real_reg[3] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/set_real_reg[3]/G is not reached by a timing clock
 Related violations: <none>
 
 TIMING-20#37 Warning
 Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc1/set_real_reg[4] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc1/set_real_reg[4]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#38 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[0] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[0]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#39 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[10] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[10]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#40 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[11] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[11]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#41 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[12] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[12]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#42 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[13] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[13]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#43 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[14] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[14]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#44 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[15] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[15]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#45 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[16] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[16]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#46 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[17] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[17]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#47 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[18] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[18]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#48 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[19] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[19]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#49 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[1] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[1]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#50 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[2] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[2]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#51 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[3] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[3]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#52 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[4] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[4]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#53 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[5] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[5]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#54 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[6] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[6]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#55 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[7] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[7]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#56 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[8] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[8]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#57 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[9] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc1/tag_real_reg[9]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#58 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/set_real_reg[0] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/set_real_reg[0]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#59 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/set_real_reg[1] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/set_real_reg[1]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#60 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/set_real_reg[2] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/set_real_reg[2]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#61 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/set_real_reg[3] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/set_real_reg[3]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#62 Warning
-Non-clocked latch  
 The latch design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/set_real_reg[4] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/set_real_reg[4]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#63 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[0] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[0]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#64 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[10] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[10]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#65 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[11] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[11]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#66 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[12] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[12]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#67 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[13] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[13]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#68 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[1] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[1]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#69 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[2] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[2]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#70 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[3] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[3]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#71 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[4] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[4]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#72 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[5] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[5]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#73 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[6] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[6]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#74 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[7] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[7]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#75 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[8] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[8]/G is not reached by a timing clock
-Related violations: <none>
-
-TIMING-20#76 Warning
-Non-clocked latch  
-The latch design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[9] cannot be properly analyzed as its control pin design_1_i/SAXI_ip_0/inst/c0/dc2/dl2u/tag_real_reg[9]/G is not reached by a timing clock
 Related violations: <none>
 
 LATCH-1#1 Advisory
 Existing latches in the design  
-There are 76 latches found in the design. Inferred latches are often the result of HDL coding mistakes, such as incomplete if or case statements.
+There are 37 latches found in the design. Inferred latches are often the result of HDL coding mistakes, such as incomplete if or case statements.
 Related violations: <none>
 
 

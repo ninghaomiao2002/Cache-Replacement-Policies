@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2023.2 (win64) Build 4029153 Fri Oct 13 20:14:34 MDT 2023
-| Date         : Sat Apr  5 14:30:09 2025
+| Date         : Thu Apr 10 15:35:32 2025
 | Host         : Desktop running 64-bit major release  (build 9200)
 | Command      : report_utilization -file design_1_wrapper_utilization_synth.rpt -pb design_1_wrapper_utilization_synth.pb
 | Design       : design_1_wrapper
@@ -32,17 +32,17 @@ Table of Contents
 +----------------------------+-------+-------+------------+-----------+-------+
 |          Site Type         |  Used | Fixed | Prohibited | Available | Util% |
 +----------------------------+-------+-------+------------+-----------+-------+
-| CLB LUTs*                  | 16441 |     0 |          0 |     70560 | 23.30 |
-|   LUT as Logic             | 16296 |     0 |          0 |     70560 | 23.10 |
+| CLB LUTs*                  | 15359 |     0 |          0 |     70560 | 21.77 |
+|   LUT as Logic             | 15214 |     0 |          0 |     70560 | 21.56 |
 |   LUT as Memory            |   145 |     0 |          0 |     28800 |  0.50 |
 |     LUT as Distributed RAM |    40 |     0 |            |           |       |
 |     LUT as Shift Register  |   105 |     0 |            |           |       |
-| CLB Registers              | 23069 |     0 |          0 |    141120 | 16.35 |
-|   Register as Flip Flop    | 23027 |     0 |          0 |    141120 | 16.32 |
-|   Register as Latch        |    42 |     0 |          0 |    141120 |  0.03 |
+| CLB Registers              | 22536 |     0 |          0 |    141120 | 15.97 |
+|   Register as Flip Flop    | 22499 |     0 |          0 |    141120 | 15.94 |
+|   Register as Latch        |    37 |     0 |          0 |    141120 |  0.03 |
 | CARRY8                     |    22 |     0 |          0 |      8820 |  0.25 |
-| F7 Muxes                   |  3030 |     0 |          0 |     35280 |  8.59 |
-| F8 Muxes                   |  1109 |     0 |          0 |     17640 |  6.29 |
+| F7 Muxes                   |  2523 |     0 |          0 |     35280 |  7.15 |
+| F8 Muxes                   |  1100 |     0 |          0 |     17640 |  6.24 |
 | F9 Muxes                   |     0 |     0 |          0 |      8820 |  0.00 |
 +----------------------------+-------+-------+------------+-----------+-------+
 * Warning! The Final LUT count, after physical optimizations and full implementation, is typically lower. Run opt_design after synthesis, if not already completed, for a more realistic count.
@@ -62,9 +62,9 @@ Warning! LUT value is adjusted to account for LUT combining.
 | 0     |            _ |       Reset |            - |
 | 0     |          Yes |           - |            - |
 | 33    |          Yes |           - |          Set |
-| 111   |          Yes |           - |        Reset |
+| 106   |          Yes |           - |        Reset |
 | 329   |          Yes |         Set |            - |
-| 22596 |          Yes |       Reset |            - |
+| 22068 |          Yes |       Reset |            - |
 +-------+--------------+-------------+--------------+
 
 
@@ -109,8 +109,8 @@ Warning! LUT value is adjusted to account for LUT combining.
 +----------------------+------+-------+------------+-----------+-------+
 |       Site Type      | Used | Fixed | Prohibited | Available | Util% |
 +----------------------+------+-------+------------+-----------+-------+
-| GLOBAL CLOCK BUFFERs |    2 |     0 |          0 |       196 |  1.02 |
-|   BUFGCE             |    1 |     0 |          0 |        88 |  1.14 |
+| GLOBAL CLOCK BUFFERs |    3 |     0 |          0 |       196 |  1.53 |
+|   BUFGCE             |    2 |     0 |          0 |        88 |  2.27 |
 |   BUFGCE_DIV         |    0 |     0 |          0 |        12 |  0.00 |
 |   BUFG_PS            |    1 |     0 |          0 |        72 |  1.39 |
 |   BUFGCTRL*          |    0 |     0 |          0 |        24 |  0.00 |
@@ -153,29 +153,29 @@ Warning! LUT value is adjusted to account for LUT combining.
 +----------+-------+---------------------+
 | Ref Name |  Used | Functional Category |
 +----------+-------+---------------------+
-| FDRE     | 22596 |            Register |
-| LUT3     |  8978 |                 CLB |
-| LUT6     |  8040 |                 CLB |
-| MUXF7    |  3030 |                 CLB |
-| LUT5     |  1997 |                 CLB |
-| LUT4     |  1143 |                 CLB |
-| MUXF8    |  1109 |                 CLB |
-| LUT2     |   691 |                 CLB |
-| LUT1     |   363 |                 CLB |
+| FDRE     | 22068 |            Register |
+| LUT3     |  9053 |                 CLB |
+| LUT6     |  7025 |                 CLB |
+| MUXF7    |  2523 |                 CLB |
+| LUT4     |  1573 |                 CLB |
+| LUT5     |  1387 |                 CLB |
+| MUXF8    |  1100 |                 CLB |
+| LUT2     |   710 |                 CLB |
+| LUT1     |   364 |                 CLB |
 | FDSE     |   329 |            Register |
 | SRLC32E  |   104 |                 CLB |
 | FDCE     |    69 |            Register |
 | RAMD32   |    66 |                 CLB |
 | RAMB36E2 |    56 |            BLOCKRAM |
-| LDCE     |    42 |            Register |
+| LDCE     |    37 |            Register |
 | FDPE     |    33 |            Register |
 | CARRY8   |    22 |                 CLB |
 | RAMS32   |    10 |                 CLB |
 | RAMB18E2 |     4 |            BLOCKRAM |
+| BUFGCE   |     2 |               Clock |
 | SRL16E   |     1 |                 CLB |
 | PS8      |     1 |            Advanced |
 | BUFG_PS  |     1 |               Clock |
-| BUFGCE   |     1 |               Clock |
 +----------+-------+---------------------+
 
 
