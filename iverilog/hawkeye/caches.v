@@ -1,5 +1,3 @@
-`ifndef _HAWKEYE_V_
-`define _HAWKEYE_V_
 // In powers of 2 above 1
 `define IL1sets 64
 
@@ -22,10 +20,8 @@
 
 `define VECTOR_SIZE 32
 `define OCC_WIDTH 4
+`define SHCT_SIZE 256
 
-`define SHCT_SIZE 8192
-`define MAX_SHCT 7
-`define MID_SHCT 4
 
 
 // Implementation of the IL1 cache in registers
@@ -105,33 +101,23 @@ module optgen_DL1
     input wire clk,
     input wire reset,
     input wire [`DL1setsLog2-1:0] set,
-    input reg [4:0] curr_timestep,
-    input reg [4:0] last_timestep,
-    input reg is_reuse, 
+    input wire [4:0] curr_timestep,
+    input wire [4:0] last_timestep,
+    input wire is_reuse, 
 	input wire access,
 	// input wire [`IADDR_bits-1:0] pc,      
     output reg should_cache          
 );
     reg [`OCC_WIDTH-1:0] occupancy_vector [`DL1sets-1:0][`VECTOR_SIZE-1:0];
     integer s, q, q_idx;
-	reg [4:0] interval;
-	// function [7:0] hash;
-	// 	input [`IADDR_bits-1:0] pc;  
-	// 	begin
-	// 		hash = pc[6:0] ^ pc[13:7] ^ pc[20:14];
-	// 	end
-	// endfunction
 
-
-    // wire [7:0] index;
-    // assign index = hash(pc);
-    always @(posedge clk or posedge reset) begin
+    always @(posedge clk) begin
         if (reset) begin
             for (s = 0; s < `DL1sets; s = s + 1)
                 for (q = 0; q < `VECTOR_SIZE; q = q + 1)
                     occupancy_vector[s][q] = 0;
             should_cache = 1;
-			interval <= 0;
+
         end 
 		if (access) begin
 			// $display("last timestep ", last_timestep, " curr_timestep ", curr_timestep, " pc ", pc, " is_reuse ", is_reuse);
@@ -141,16 +127,26 @@ module optgen_DL1
 				// interval <= curr_timestep - last_timestep;
 				// $display("%d", interval);
 				// $display("%d %d", last_timestep, curr_timestep);
-				for (q_idx = last_timestep; q_idx != curr_timestep; q_idx = (q_idx + 1) % `VECTOR_SIZE) begin
-					if (occupancy_vector[set][q_idx] >= `DL1ways) begin
+
+				for (q_idx=0; q_idx<`VECTOR_SIZE; q_idx=q_idx+1) begin
+					if (occupancy_vector[set][(curr_timestep-last_timestep+q_idx)% `VECTOR_SIZE]>=`DL1ways) begin
 						should_cache = 0;
 						// $display("ov bigger than ways");
 					end
 				end
+
+				// for (q_idx = last_timestep; q_idx != curr_timestep; q_idx = (q_idx + 1) % `VECTOR_SIZE) begin
+				// 	if (occupancy_vector[set][q_idx] >= `DL1ways) begin
+				// 		should_cache = 0;
+				// 		// $display("ov bigger than ways");
+				// 	end
+				// end
 				if (should_cache) begin
-					for (q_idx = last_timestep; q_idx != curr_timestep; q_idx = (q_idx + 1) % `VECTOR_SIZE) begin
-						if (occupancy_vector[set][q_idx] < `DL1ways) begin
-							occupancy_vector[set][q_idx] = occupancy_vector[set][q_idx] + 1;
+					
+					
+					for (q_idx=0; q_idx<`VECTOR_SIZE; q_idx=q_idx+1) begin
+						if (occupancy_vector[set][(curr_timestep-last_timestep+q_idx)% `VECTOR_SIZE] < `DL1ways) begin
+							occupancy_vector[set][(curr_timestep-last_timestep+q_idx)% `VECTOR_SIZE] = occupancy_vector[set][(curr_timestep-last_timestep+q_idx)% `VECTOR_SIZE] + 1;
 							// $display("ov increment");
 						end
 					end
@@ -173,33 +169,23 @@ module optgen_DL2
     input wire clk,
     input wire reset,
     input wire [`DL2setsLog2-1:0] set,
-    input reg [4:0] curr_timestep,
-    input reg [4:0] last_timestep,
-    input reg is_reuse,
+    input wire [4:0] curr_timestep,
+    input wire [4:0] last_timestep,
+    input wire is_reuse,
 	input wire access,
 	// input wire [`IADDR_bits-1:0] pc,      
     output reg should_cache          
 );
     reg [`OCC_WIDTH-1:0] occupancy_vector [`DL2sets-1:0][`VECTOR_SIZE-1:0];
     integer s, q, q_idx;
-	reg [4:0] interval;
-	// function [7:0] hash;
-	// 	input [`IADDR_bits-1:0] pc;  
-	// 	begin
-	// 		hash = pc[6:0] ^ pc[13:7] ^ pc[20:14];
-	// 	end
-	// endfunction
 
-
-    // wire [7:0] index;
-    // assign index = hash(pc);
-    always @(posedge clk or posedge reset) begin
+    always @(posedge clk) begin
         if (reset) begin
             for (s = 0; s < `DL2sets; s = s + 1)
                 for (q = 0; q < `VECTOR_SIZE; q = q + 1)
                     occupancy_vector[s][q] = 0;
             should_cache = 1;
-			interval <= 0;
+
         end 
 		if (access) begin
 			// $display("last timestep ", last_timestep, " curr_timestep ", curr_timestep, " pc ", pc, " is_reuse ", is_reuse);
@@ -209,16 +195,18 @@ module optgen_DL2
 				// interval <= curr_timestep - last_timestep;
 				// $display("%d", interval);
 				// $display("%d %d", last_timestep, curr_timestep);
-				for (q_idx = last_timestep; q_idx != curr_timestep; q_idx = (q_idx + 1) % `VECTOR_SIZE) begin
-					if (occupancy_vector[set][q_idx] >= `DL2ways) begin
+				for (q_idx=0; q_idx<`VECTOR_SIZE; q_idx=q_idx+1) begin
+					if (occupancy_vector[set][(curr_timestep-last_timestep+q_idx)% `VECTOR_SIZE]>=`DL1ways) begin
 						should_cache = 0;
 						// $display("ov bigger than ways");
 					end
 				end
 				if (should_cache) begin
-					for (q_idx = last_timestep; q_idx != curr_timestep; q_idx = (q_idx + 1) % `VECTOR_SIZE) begin
-						if (occupancy_vector[set][q_idx] < `DL2ways) begin
-							occupancy_vector[set][q_idx] = occupancy_vector[set][q_idx] + 1;
+					
+					
+					for (q_idx=0; q_idx<`VECTOR_SIZE; q_idx=q_idx+1) begin
+						if (occupancy_vector[set][(curr_timestep-last_timestep+q_idx)% `VECTOR_SIZE] < `DL1ways) begin
+							occupancy_vector[set][(curr_timestep-last_timestep+q_idx)% `VECTOR_SIZE] = occupancy_vector[set][(curr_timestep-last_timestep+q_idx)% `VECTOR_SIZE] + 1;
 							// $display("ov increment");
 						end
 					end
@@ -411,23 +399,16 @@ module DL1cache (clk, reset,cycles,
             
     genvar j; integer j_;
     
-    reg zero_found;
 
 
-	reg [4:0] last_access_timestep [`DL1sets-1:0][256]; 
     reg [4:0] curr_timestep;  
-    reg [63:0] access_pc;
+    reg [`IADDR_bits-1:0] access_pc;
 
     wire is_sampled_set = 1'b1; 
     reg is_reuse;
-    reg should_cache;
+    wire should_cache;
     wire [2:0] prediction;
-	wire current_prediction = prediction;
     reg train_up, train_down;
-	reg [61:0] train_up_count;
-	reg [61:0] train_down_count;
-	reg [61:0] prediction_count;
-	reg [61:0] should_cache_count;
 
     for (j=0;j<`DL1ways;j=j+1) begin   
    	
@@ -471,17 +452,14 @@ module DL1cache (clk, reset,cycles,
 	reg full_line_write_miss;
 	reg [61:0] hit_count;
 	reg [61:0] access_count;
-	reg found_victim;
+
 	reg [2:0] max_rrpv;
 	reg [`DADDR_bits-(`VLEN_Log2-3)-`DL1setsLog2-1:0] tag_history [`DL1sets-1:0][`VECTOR_SIZE-1:0];
 	reg [4:0] timestep_history [`DL1sets-1:0][`VECTOR_SIZE-1:0];
-	integer h;
+
 	reg found_tag_match;
 	reg [4:0] last_timestep_for_tag;
-	reg [`DADDR_bits-(`VLEN_Log2-3)-`DL1setsLog2-1:0] last_access_tag [`DL1sets-1:0][256];
-	reg strong_train_up;
-	reg strong_train_down;
-	reg train_down_consecutive;
+
 
 	optgen_DL1 optgen_DL1_inst (
         .clk(clk), 
@@ -527,13 +505,7 @@ module DL1cache (clk, reset,cycles,
 			
             train_up <= 0;
             train_down <= 0;
-			train_up_count <= 0;
-			train_down_count <= 0;
-			prediction_count <= 0;
-			should_cache_count <= 0;
-			strong_train_up <= 0;
-			strong_train_down <= 0;
-			train_down_consecutive <= 0;
+
 			
 
             
@@ -600,8 +572,8 @@ module DL1cache (clk, reset,cycles,
 					curr_timestep = curr_timestep + 1;
 					last_timestep_for_tag = 0;
 
-					for (j_ = 0; j_ < `VECTOR_SIZE && !found_tag_match; j_ = j_ + 1) begin
-						if (tag_history[set][j_] == tag) begin
+					for (j_ = 0; j_ < `VECTOR_SIZE; j_ = j_ + 1) begin
+						if (tag_history[set][j_]==tag && !found_tag_match) begin
 							found_tag_match = 1;
 							is_reuse = 1;
 							last_timestep_for_tag = timestep_history[set][j_];
@@ -627,7 +599,7 @@ module DL1cache (clk, reset,cycles,
                 if (hit) begin
                     hit_count<=hit_count+1;
                     // hit_rate<=(hit_count*100)/access_count;
-                    // $display("L1 hit_count %d, access_count %d",hit_count, access_count);
+                    $display("L1 hit_count %d, access_count %d",hit_count, access_count);
 
                     if (prediction > 4) begin
                         rrpv[set][candidate] <= 3'b111; 
@@ -720,20 +692,6 @@ module DL1cache (clk, reset,cycles,
                     miss_way<=candidate;
 
 			    end
-
-
-				if (train_up) begin
-					train_up_count <= train_up_count + 1;
-				end
-				if (train_down) begin
-					train_down_count <= train_down_count + 1;
-				end
-				if (prediction) begin
-					prediction_count <= prediction_count + 1;
-				end
-				if (should_cache) begin
-					should_cache_count <= should_cache_count + 1;
-				end
 			end
 			
 			
@@ -859,7 +817,7 @@ module DL2cache (clk, reset, cycles,
     output reg flush_out;
 	input [`IADDR_bits-1:0] pc_in;
     
-    (* ram_style = "block" *) reg [`DL2block/`DL2subblocks-1:0] way [`DL2ways-1:0][`DL2sets*`DL2subblocks-1:0] ;
+	(* ram_style = "block" *) reg [`DL2block/`DL2subblocks-1:0] way [`DL2ways-1:0][`DL2sets*`DL2subblocks-1:0] ;
     reg [`DL2block/`DL2subblocks-1:0] rdata [`DL2ways-1:0];
     reg [`DL2block/`DL2subblocks-1:0] wdata;
 
@@ -915,15 +873,15 @@ module DL2cache (clk, reset, cycles,
             
     genvar j; integer j_;
     
-    reg zero_found;        
+   
 
 
-    reg [4:0] last_access_timestep [`DL2sets-1:0][256]; 
+
     reg [4:0] curr_timestep; 
     
 
-    // reg [63:0] last_pc [`DL2sets-1:0][`DL2ways-1:0]; 
-    reg [63:0] access_pc; 
+
+    reg [`IADDR_bits-1:0] access_pc; 
     
 
     wire is_sampled_set = 1; 
@@ -931,11 +889,6 @@ module DL2cache (clk, reset, cycles,
     wire should_cache;
     wire prediction;
     reg train_up, train_down;
-	reg [61:0] train_up_count;
-	reg [61:0] train_down_count;
-	reg [61:0] prediction_count;
-	reg [61:0] should_cache_count;
-
 
     for (j=0;j<`DL2ways;j=j+1) begin   
    	
@@ -985,14 +938,14 @@ module DL2cache (clk, reset, cycles,
 	reg hitw_saved;	
 	reg [61:0] hit_count;
 	reg [61:0] access_count;
-	reg found_victim;
+
 	reg [2:0] max_rrpv;
 	reg [`DADDR_bits-(`VLEN_Log2-3)-`DL2setsLog2-1:0] tag_history [`DL2sets-1:0][`VECTOR_SIZE-1:0];
 	reg [4:0] timestep_history [`DL2sets-1:0][`VECTOR_SIZE-1:0];
-	integer h;
+
 	reg found_tag_match;
 	reg [4:0] last_timestep_for_tag;
-	reg [`DADDR_bits-(`VLEN_Log2-3)-`DL2setsLog2-1:0] last_access_tag [`DL2sets-1:0][256];
+
 
 	optgen_DL2 optgen_DL2_inst (
         .clk(clk), 
@@ -1001,6 +954,7 @@ module DL2cache (clk, reset, cycles,
         .curr_timestep(curr_timestep),
         .last_timestep(last_timestep_for_tag),
         .is_reuse(is_reuse),
+		.access(access),
 		// .pc(access_pc),
         .should_cache(should_cache)
     );
@@ -1036,9 +990,6 @@ module DL2cache (clk, reset, cycles,
 			hit_count<=0; access_count<=0; 
 			train_up <= 0;
             train_down <= 0;
-			train_up_count <= 0;
-			train_down_count <= 0;
-			should_cache_count <= 0;
 
             for (i = 0; i < `DL2sets; i = i + 1) begin
                 for (k = 0; k < `VECTOR_SIZE; k = k + 1) begin
@@ -1101,8 +1052,8 @@ module DL2cache (clk, reset, cycles,
 					curr_timestep = curr_timestep + 1;
 					last_timestep_for_tag = 0;
 
-					for (j_ = 0; j_ < `VECTOR_SIZE && !found_tag_match; j_ = j_ + 1) begin
-						if (tag_history[set][j_] == tag) begin
+					for (j_ = 0; j_ < `VECTOR_SIZE; j_ = j_ + 1) begin
+						if (tag_history[set][j_] == tag && !found_tag_match) begin
 							found_tag_match = 1;
 							is_reuse = 1;
 							last_timestep_for_tag = timestep_history[set][j_];
@@ -1128,7 +1079,7 @@ module DL2cache (clk, reset, cycles,
 				if (hit) begin
 					hit_count<=hit_count+1;
 					// hit_rate<=(hit_count*100)/access_count;
-					// $display("L2 hit_count %d, access_count %d",hit_count, access_count);
+					$display("L2 hit_count %d, access_count %d",hit_count, access_count);
                     
 					if (prediction > 4) begin
                         rrpv[set][candidate] <= 3'b111; 
@@ -1218,15 +1169,6 @@ module DL2cache (clk, reset, cycles,
 				end
 			end
 
-			if (train_up) begin
-					train_up_count <= train_up_count + 1;
-				end
-				if (train_down) begin
-					train_down_count <= train_down_count + 1;
-                end
-				if (should_cache) begin
-					should_cache_count <= should_cache_count + 1;
-				end
 
 			if (we_pending  
 				) begin
@@ -1447,5 +1389,3 @@ module DL2cacheU (clk, reset, cycles,
 		if (`DEB)$dumpvars(0, clk, reset, en,we,enI, enD, weD, dreadyI, dreadyD,  dready,pending,pendingI);
 	end	
 endmodule // DL2cacheU
-
-`endif // _HAWKEYE_V_

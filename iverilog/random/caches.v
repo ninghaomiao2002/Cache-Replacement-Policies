@@ -286,7 +286,7 @@ module DL1cache (clk, reset,cycles,
 			if (hit) begin
 				hit_count<=hit_count+1;
 				// hit_rate<=(hit_count*100)/access_count;
-				// $display("L1 hit_count %d, access_count %d",hit_count, access_count);
+				$display("L1 hit_count %d, access_count %d",hit_count, access_count);
 				if (`DEB)$display("hit1 set %d tag %h way %h",set, tag, candidate);
 				if (en) ready<=1;
 				
@@ -640,7 +640,7 @@ module DL2cache (clk, reset,
 			if (hit) begin
 				hit_count<=hit_count+1;
 				// hit_rate<=(hit_count*100)/access_count;
-				// $display("L2 hit_count %d, access_count %d",hit_count, access_count);
+				$display("L2 hit_count %d, access_count %d",hit_count, access_count);
 				if (`DEB)$display("hit set %d tag %h way %h",set, tag, candidate);
 				if (en) ready<=1;
 

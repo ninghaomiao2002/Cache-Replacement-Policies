@@ -144,8 +144,6 @@ module DL1cache (clk, reset,cycles,
 	reg [`DADDR_bits-(`VLEN_Log2-3)-`DL1setsLog2-1:0] tag_array [`DL1sets-1:0][`DL1ways-1:0];
     reg [`DL1ways-1:0] dirty [`DL1sets-1:0];
     reg [`DL1ways-1:0] valid [`DL1sets-1:0];
-    // reg [`DL1ways-1:0] nru_bit [`DL1sets-1:0];
-	// this has changed to 2-bit LRU replacement policy
 	reg [`DL1waysLog2-1:0] lru_state [`DL1sets-1:0][`DL1ways-1:0];
 
     wire [`DADDR_bits-(`VLEN_Log2-3)-`DL1setsLog2-1:0] tag; 

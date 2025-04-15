@@ -557,21 +557,22 @@ module DL1cache (clk, reset,cycles,
 
 
 			if (!hit) begin
-				// $display("Before Access hit %d in set %d way %d;srrip_state %2b %2b %2b %2b", hit, set, candidate, srrip_state[set][0], srrip_state[set][1], srrip_state[set][2], srrip_state[set][3]);
 				found_candidate = 0;
 				// candidate = 0;
-				for (i = 0; i < `DL1ways && !found_candidate; i = i + 1) begin
-					for (j_ = 0; j_ < `DL1ways && !found_candidate; j_ = j_ + 1) begin
-						if (srrip_state[set][j_] == 2'b11) begin  
-							candidate = j_;
-							found_candidate = 1;  
-						end
-					end
-					
+				for (i = 0; i < `DL1ways; i = i + 1) begin
 					if (!found_candidate) begin
 						for (j_ = 0; j_ < `DL1ways; j_ = j_ + 1) begin
-							if (srrip_state[set][j_] < 2'b11) begin
-								srrip_state[set][j_] = srrip_state[set][j_] + 1;
+							if (srrip_state[set][j_] == 2'b11) begin  
+								candidate = j_;
+								found_candidate = 1;  
+							end
+						end
+					
+						if (!found_candidate) begin
+							for (j_ = 0; j_ < `DL1ways; j_ = j_ + 1) begin
+								if (srrip_state[set][j_] < 2'b11) begin
+									srrip_state[set][j_] = srrip_state[set][j_] + 1;
+								end
 							end
 						end
 					end
@@ -579,7 +580,6 @@ module DL1cache (clk, reset,cycles,
 				
 				
 				srrip_state[set][candidate] = 2'b10;
-				// $display("After Access hit %d in set %d way %d;srrip_state %2b %2b %2b %2b", hit, set, candidate, srrip_state[set][0], srrip_state[set][1], srrip_state[set][2], srrip_state[set][3]);
 			end
 
 
@@ -946,24 +946,27 @@ module DL2cache (clk, reset,
 			end
 			if (!hit) begin
 				found_candidate = 0;
-				for (i = 0; i < `DL2ways && !found_candidate; i = i + 1) begin
-					// Search for a block with RRPV = 3
-					for (j_ = 0; j_ < `DL2ways && !found_candidate; j_ = j_ + 1) begin
-						if (srrip_state[set][j_] == 2'b11) begin 
-							candidate = j_;
-							found_candidate = 1; 
-						end
-					end
-					
-					
+				// candidate = 0;
+				for (i = 0; i < `DL2ways; i = i + 1) begin
 					if (!found_candidate) begin
 						for (j_ = 0; j_ < `DL2ways; j_ = j_ + 1) begin
-							if (srrip_state[set][j_] < 2'b11) begin
-								srrip_state[set][j_] = srrip_state[set][j_] + 1;
+							if (srrip_state[set][j_] == 2'b11) begin  
+								candidate = j_;
+								found_candidate = 1;  
+							end
+						end
+					
+						if (!found_candidate) begin
+							for (j_ = 0; j_ < `DL2ways; j_ = j_ + 1) begin
+								if (srrip_state[set][j_] < 2'b11) begin
+									srrip_state[set][j_] = srrip_state[set][j_] + 1;
+								end
 							end
 						end
 					end
 				end
+				
+				
 				srrip_state[set][candidate] = 2'b10;
 			end
 			
@@ -976,7 +979,7 @@ module DL2cache (clk, reset,
 				for (j_ = 0; j_ < `DL2ways; j_ = j_ + 1) begin
 					if (j_ == candidate) begin
 						// $display("previous lru_candidate %d", a);
-						srrip_state[set][j_] = 2'b00; // Immediate update
+						srrip_state[set][j_] = 2'b00; 
 					end 
 				end
 				

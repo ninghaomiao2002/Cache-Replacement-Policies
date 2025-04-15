@@ -315,7 +315,7 @@ module Core (clk, reset, cycles,
 
     input readyB; input accepting;    
 	output debug;
-	output [63:0] current_pc;
+	output reg [`IADDR_bits-1:0] current_pc;
 	
 	reg [48-1:0] cycle_counter; reg [48-1:0] instr_counter;
 	
@@ -468,6 +468,7 @@ module Core (clk, reset, cycles,
 			PC<=StartAddress;
 			
 			enB<=0;	weB<=0;	
+			current_pc <= 0;
 
 			cycle_counter<=0;
 			instr_counter<=0;
@@ -578,6 +579,7 @@ module Core (clk, reset, cycles,
 									if (`DEB)$display("SIMDwrite %h from v%d daddr %h cyc%d PC%h", reg_file_v[vrs1],vrs1, daddr,cycle_counter,PC);
 									doutB <= reg_file_v[vrs1];
 									weB<={(`VLEN/8){1'b1}};
+									current_pc <= PC;
 									addrB <= {daddr[`DADDR_bits-1:`VLEN_Log2-3],{(`VLEN_Log2-3){1'b0}} };
 								end
 								
@@ -619,17 +621,20 @@ module Core (clk, reset, cycles,
 							case(func3)
 								3'h0: begin // sb
 									weB<=(1'b1)<<daddr[1:0];
+									current_pc <= PC;
 									doutB <= reg_file[rs2]<<(8*daddr[1:0]);
 									
 									 end 
 								3'h1: begin // sh
 									weB<=(2'b11)<<(2*daddr[1]); 
+									current_pc <= PC;
 									doutB <= reg_file[rs2]<<(16*daddr[1]);
 									if (`DEB)if (daddr[0]!=0)$display("ERROR");
 
 									end 
 								3'h2: begin 
 									weB<=4'b1111; // sw
+									current_pc <= PC;
 									if (`DEB)if (daddr[1:0]!=0)$display("ERROR");
 									end
 								default: weB<=0;                              
@@ -656,7 +661,8 @@ module Core (clk, reset, cycles,
 				
 				// On loads, make the request to the caches, and keep the rd (or vrd for SIMD)
 				if (load_enable) begin
-					enB<=1;										
+					enB<=1;			
+					current_pc <= PC;							
 					read_rq_i_in<=read_rq_i_in+1;
 					if (simd_inst) begin
 						reg_pend_v[vrd1]<=1;						
@@ -707,7 +713,7 @@ module Core (clk, reset, cycles,
 		
 	end
 	
-	assign current_pc = {32'b0, PC};
+	// assign current_pc = {32'b0, PC};
 	
 	initial begin
 		if (`DEB)$dumpvars(0, clk, reset, PC, PCnext, instr, enB, weB, accepting, halt,read_rq_i_out, read_rq_i_in,iformat, cycle_counter, rs1,rs2,rd,next_direction,next_step, vrs1, vrs2, vrd1, vrd2, func3, immediate,instr_counter);

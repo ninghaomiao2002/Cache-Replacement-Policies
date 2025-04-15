@@ -24,6 +24,7 @@
 
 `define DEB 0  // DEB = 1 enables the waveform generation and (meaningless) debugging comments
 `define STDO 1 // Enables stdout in simulation
+`define IADDR_bits 21
 
 `include "cpu.v"
 `include "caches.v"
@@ -82,7 +83,7 @@ module System(clk, reset, StartAddress, StackPointer,
     wire flush_l2;
     wire [31:0] cycles;
 
-    wire [63:0] current_pc; 
+    wire [`IADDR_bits-1:0] current_pc; 
     
     DL1cache dc1(clk, reset, cycles,
 		addrB, enB, weB, dinB, doutB, readyB, acceptingB, flush,
