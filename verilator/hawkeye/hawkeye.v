@@ -406,27 +406,12 @@ module optgen_DL1
     reg [`OCC_WIDTH-1:0] occupancy_vector [`DL1sets-1:0][`VECTOR_SIZE-1:0];
     integer s, q, q_idx;
 
-    genvar j;
-    reg [`DL1sets-1:0] we_local;
-    reg [`VECTOR_SIZELog2-1:0] baddr;
-    reg [`OCC_WIDTH-1:0] wdata;
-    reg [`OCC_WIDTH-1:0] rdata [`DL1sets-1:0];
-    for (j=0;j<`DL1sets;j=j+1) begin   
-		always @(posedge clk) begin
-			if (we_local[j]) begin
-				occupancy_vector[j][baddr]<=wdata;
-			end         
-			rdata[j]<=occupancy_vector[j][set];
-		end
-	end
-
     always @(posedge clk) begin
         if (reset) begin
             for (s = 0; s < `DL1sets; s = s + 1)
                 for (q = 0; q < `VECTOR_SIZE; q = q + 1)
                     occupancy_vector[s][q] = 0;
             should_cache = 1;
-
         end 
 		if (access) begin
 			// $display("last timestep ", last_timestep, " curr_timestep ", curr_timestep, " pc ", pc, " is_reuse ", is_reuse);

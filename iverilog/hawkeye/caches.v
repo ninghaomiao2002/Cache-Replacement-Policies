@@ -117,7 +117,6 @@ module optgen_DL1
                 for (q = 0; q < `VECTOR_SIZE; q = q + 1)
                     occupancy_vector[s][q] = 0;
             should_cache = 1;
-
         end 
 		if (access) begin
 			// $display("last timestep ", last_timestep, " curr_timestep ", curr_timestep, " pc ", pc, " is_reuse ", is_reuse);
