@@ -14,7 +14,7 @@
 // `include "caches_hawkeye.v"
 // `include "hawkeye.v"
 // `include "reference.v"
-`include "hawkeye.v"
+`include "caches.v"
 `include "custom.v"
 
 module System(clk, reset, StartAddress, StackPointer,      

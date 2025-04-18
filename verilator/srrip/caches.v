@@ -479,8 +479,6 @@ module DL1cache (clk, reset,cycles,
 		end
 	end
 	
-	
-	
 	reg we_pending; reg[`VLEN/8-1:0] we_pending_v; reg [`VLEN-1:0] we_pending_data;
 	reg en_pending; reg [`VLEN/8-1:0] en_pending_write; reg [`DADDR_bits-1:0] en_pending_addr;
 	reg writeback;
@@ -553,9 +551,6 @@ module DL1cache (clk, reset,cycles,
 				end
 			end
 
-			
-
-
 			if (!hit) begin
 				found_candidate = 0;
 				// candidate = 0;
@@ -581,9 +576,6 @@ module DL1cache (clk, reset,cycles,
 				
 				srrip_state[set][candidate] = 2'b10;
 			end
-
-
-
 			
 
 
@@ -964,9 +956,7 @@ module DL2cache (clk, reset,
 							end
 						end
 					end
-				end
-				
-				
+				end			
 				srrip_state[set][candidate] = 2'b10;
 			end
 			

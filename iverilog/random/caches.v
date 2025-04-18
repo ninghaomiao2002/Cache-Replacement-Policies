@@ -165,7 +165,8 @@ module DL1cache (clk, reset,cycles,
     wire [`DL1setsLog2-1:0] writethrough_set; assign writethrough_set = writethrough_block[`DL1setsLog2+`DL1waysLog2-1:`DL1waysLog2];
     wire [`DL1waysLog2-1:0] writethrough_way; assign writethrough_way = writethrough_block[`DL1waysLog2-1:0];
     
-    wire [`DL1setsLog2-1:0] set; assign set = (flushing && !waiting)?writethrough_set:(addr>>(`VLEN_Log2-3)); 
+    wire [`DL1setsLog2-1:0] set; 
+	assign set = (flushing && !waiting)?writethrough_set:(addr>>(`VLEN_Log2-3)); 
     reg [`DADDR_bits-(`VLEN_Log2-3)-`DL1setsLog2-1:0] tag_real; 
     reg [`DL1setsLog2-1:0] set_real; 
     always @(*) begin 
@@ -233,8 +234,6 @@ module DL1cache (clk, reset,cycles,
 	reg full_line_write_miss;
 	reg [61:0] hit_count;
 	reg [61:0] access_count;
-
-
 	
 	always @( posedge clk ) begin
 		if (reset) begin

@@ -525,7 +525,6 @@ module DL1cache (clk, reset,cycles,
 	reg full_line_write_miss;
 	reg [61:0] hit_count;
 	reg [61:0] access_count;
-	// reg [7:0] hit_rate;
 	
 	always @( posedge clk ) begin
 		if (reset) begin

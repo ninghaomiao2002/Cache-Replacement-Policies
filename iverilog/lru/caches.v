@@ -312,8 +312,6 @@ module DL1cache (clk, reset,cycles,
 						lru_state[set][j_] = lru_state[set][j_] + 1;
 					end
 				end
-				// $display("%d %d %d %d %d %d %d %d", lru_state[set][0], lru_state[set][1],lru_state[set][2], lru_state[set][3], lru_state[set][4], lru_state[set][5], lru_state[set][6], lru_state[set][7]);
-				// $display(lru_state[set][0]," ",lru_state[set][1]," ",lru_state[set][2]," ",lru_state[set][3]," ",lru_state[set][4]," ", lru_state[set][5]," ",lru_state[set][6]," ",lru_state[set][7]);
 			end
 			if (hit) begin
 				hit_count<=hit_count+1;
@@ -667,7 +665,7 @@ module DL2cache (clk, reset,
 					candidate=j_;
 					miss=0;
 				end
-				if (access && (lru_state[set][j_]==`DL2LRUMAX) && /*(!zero_found) &&*/ (!hit)) begin
+				if (access && (lru_state[set][j_]==`DL2LRUMAX) /*&&(!zero_found)*/ && (!hit)) begin
 					candidate=j_;
 					// zero_found=1;
 				end
@@ -685,7 +683,6 @@ module DL2cache (clk, reset,
 					end else if (lru_state[set][j_] < a) begin
 						lru_state[set][j_] = lru_state[set][j_] + 1;
 					end
-					// $display("%d %d %d %d %d %d %d %d", lru_state[set][0], lru_state[set][1],lru_state[set][2], lru_state[set][3], lru_state[set][4], lru_state[set][5], lru_state[set][6], lru_state[set][7]);
 				end
 			end
 			

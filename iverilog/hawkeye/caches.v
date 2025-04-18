@@ -123,7 +123,6 @@ module optgen_DL1
 			if (is_reuse) begin
 				should_cache = 1;
 				occupancy_vector[set][curr_timestep] = 0;
-				// interval <= curr_timestep - last_timestep;
 				// $display("%d", interval);
 				// $display("%d %d", last_timestep, curr_timestep);
 
@@ -133,15 +132,8 @@ module optgen_DL1
 						// $display("ov bigger than ways");
 					end
 				end
-
-				// for (q_idx = last_timestep; q_idx != curr_timestep; q_idx = (q_idx + 1) % `VECTOR_SIZE) begin
-				// 	if (occupancy_vector[set][q_idx] >= `DL1ways) begin
-				// 		should_cache = 0;
-				// 		// $display("ov bigger than ways");
-				// 	end
-				// end
+				
 				if (should_cache) begin
-					
 					
 					for (q_idx=0; q_idx<`VECTOR_SIZE; q_idx=q_idx+1) begin
 						if (occupancy_vector[set][(curr_timestep-last_timestep+q_idx)% `VECTOR_SIZE] < `DL1ways) begin
@@ -157,9 +149,7 @@ module optgen_DL1
 				// $display("ov not reused");
 			end
 			// $display("DL1: should_cache: ",should_cache, " ", pc);
-			
 		end
-		
     end
 endmodule
 
@@ -191,7 +181,6 @@ module optgen_DL2
 			if (is_reuse) begin
 				should_cache = 1;
 				occupancy_vector[set][curr_timestep] = 0;
-				// interval <= curr_timestep - last_timestep;
 				// $display("%d", interval);
 				// $display("%d %d", last_timestep, curr_timestep);
 				for (q_idx=0; q_idx<`VECTOR_SIZE; q_idx=q_idx+1) begin
@@ -201,7 +190,6 @@ module optgen_DL2
 					end
 				end
 				if (should_cache) begin
-					
 					
 					for (q_idx=0; q_idx<`VECTOR_SIZE; q_idx=q_idx+1) begin
 						if (occupancy_vector[set][(curr_timestep-last_timestep+q_idx)% `VECTOR_SIZE] < `DL1ways) begin
@@ -232,7 +220,6 @@ module hawkeye_predictor_DL1 (
 	input wire access,
     output reg [2:0] prediction
 );
-
     reg [2:0] shct [0:`SHCT_SIZE-1];
 
     function [7:0] hash;
@@ -266,10 +253,6 @@ module hawkeye_predictor_DL1 (
 			// $display("DL1: prediction: ",prediction, " ", index, " ", pc);
         end
 		// $display("DL1: prediction: ",shct[index][2]);
-		// 
-		// if (access) begin 
-		// $display("DL1: prediction: ",shct[index], " ", index, " ", pc);
-		// end
     end
     // assign prediction = shct[index];
 endmodule
@@ -317,10 +300,6 @@ module hawkeye_predictor_DL2 (
 			// $display("DL2: prediction: ",prediction, " ", index, " ", pc);
         end
 		// $display("DL2: prediction: ",shct[index][2]);
-		// 
-		// if (access) begin 
-		// $display("DL2: prediction: ",shct[index], " ", index, " ", pc);
-		// end
     end
     // assign prediction = shct[index];
 endmodule
@@ -590,7 +569,6 @@ module DL1cache (clk, reset,cycles,
 					end
 
 					// $display("tag: ", tag, " found_tag_match: ", found_tag_match, " curr_timestep ", curr_timestep, " last_timestep_for_tag ", last_timestep_for_tag);
-					// $display("tag: ", tag, " found_tag_match: ", found_tag_match, " tag_history: ", tag_history[set][`VECTOR_SIZE-1]," timestep_history: ", timestep_history[set][`VECTOR_SIZE-1], " curr_timestep ", curr_timestep, " last_timestep_for_tag ", last_timestep_for_tag);
 					// $display("tag: ", tag);
 					
 				end
@@ -633,15 +611,11 @@ module DL1cache (clk, reset,cycles,
                         rrpv[set][candidate] <= 3'b111;
                         
                     end else begin
-                        // Cache-averse RRIP = 7
 						rrpv[set][candidate] <= 3'b000;
-
 						for (j_ = 0; j_ < `DL2ways; j_ = j_ + 1) begin
-
 						if (j_ != candidate && rrpv[set][j_] < 3'b110) begin 
 							rrpv[set][j_] <= rrpv[set][j_] + 1;
 						end
-                        
                         end
                     end
 
@@ -1068,10 +1042,6 @@ module DL2cache (clk, reset, cycles,
 						tag_history[set][`VECTOR_SIZE-1] = tag;
 						timestep_history[set][`VECTOR_SIZE-1] = curr_timestep;
 					end
-
-					// $display("tag: ", tag, " found_tag_match: ", found_tag_match, " curr_timestep ", curr_timestep, " last_timestep_for_tag ", last_timestep_for_tag);
-					// $display("tag: ", tag, " found_tag_match: ", found_tag_match, " tag_history: ", tag_history[set][`VECTOR_SIZE-1]," timestep_history: ", timestep_history[set][`VECTOR_SIZE-1], " curr_timestep ", curr_timestep, " last_timestep_for_tag ", last_timestep_for_tag);
-					// $display("tag: ", tag);
 					
 				end
 
@@ -1118,15 +1088,11 @@ module DL2cache (clk, reset, cycles,
                         rrpv[set][candidate] <= 3'b111;
                         
                     end else begin
-                        // Cache-averse RRIP = 7
 						rrpv[set][candidate] <= 3'b000;
-
 						for (j_ = 0; j_ < `DL2ways; j_ = j_ + 1) begin
-
-						if (j_ != candidate && rrpv[set][j_] < 3'b110) begin 
-							rrpv[set][j_] <= rrpv[set][j_] + 1;
-						end
-                        
+							if (j_ != candidate && rrpv[set][j_] < 3'b110) begin 
+								rrpv[set][j_] <= rrpv[set][j_] + 1;
+							end
                         end
                     end
 
