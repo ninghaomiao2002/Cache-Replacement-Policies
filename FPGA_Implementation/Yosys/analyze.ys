@@ -1,0 +1,3 @@
+read_verilog caches_hawkeye.v
+synth_xilinx -top DL1cache
+stat
