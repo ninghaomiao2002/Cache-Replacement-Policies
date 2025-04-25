@@ -213,7 +213,7 @@ module DL1cache (clk, reset,cycles,
             		dirty[i]<=0;
 					valid[i]<=0;
 					for (j_ = 0; j_ < `DL1ways; j_ = j_ + 1) begin
-                		srrip_state[i][j_] <= 2'b11; // 3
+                		srrip_state[i][j_] <= 2'b11; 
             		end
         		end
 
@@ -237,8 +237,6 @@ module DL1cache (clk, reset,cycles,
 			hit=0; miss=access; zero_found=0;//candidate=0;
 			if (access) begin
 			access_count<=access_count+1;
-			// 	// if (`DEB) 
-			// 	$display("Access");
 			end
 			
 			for (j_=0;j_<`DL1ways;j_=j_+1) begin
@@ -277,7 +275,6 @@ module DL1cache (clk, reset,cycles,
 
 			if (hit) begin
 				hit_count<=hit_count+1;
-				// hit_rate<=(hit_count*100)/access_count;
 				// $display("L1 hit_count %d, access_count %d",hit_count, access_count);
 				
 				for (j_ = 0; j_ < `DL1ways; j_ = j_ + 1) begin
@@ -637,7 +634,6 @@ module DL2cache (clk, reset,
 			if (!hit) begin
 				found_candidate = 0;
 				for (i = 0; i < `DL2ways && !found_candidate; i = i + 1) begin
-					// Search for a block with RRPV = 3
 					for (j_ = 0; j_ < `DL2ways && !found_candidate; j_ = j_ + 1) begin
 						if (srrip_state[set][j_] == 2'b11) begin 
 							candidate = j_;
@@ -659,13 +655,11 @@ module DL2cache (clk, reset,
 			
 			if (hit) begin
 				hit_count<=hit_count+1;
-				// hit_rate<=(hit_count*100)/access_count;
 				// $display("L2 hit_count %d, access_count %d",hit_count, access_count);
 				if (`DEB)$display("hit set %d tag %h way %h",set, tag, candidate);
 				
 				for (j_ = 0; j_ < `DL2ways; j_ = j_ + 1) begin
 					if (j_ == candidate) begin
-						// $display("previous lru_candidate %d", a);
 						srrip_state[set][j_] = 2'b00;
 					end 
 				end

@@ -327,12 +327,9 @@ module DL1cache (clk, reset,cycles,
 						lru_state[set][j_] = lru_state[set][j_] + 1;
 					end
 				end
-				// $display("%d %d %d %d %d %d %d %d", lru_state[set][0], lru_state[set][1],lru_state[set][2], lru_state[set][3], lru_state[set][4], lru_state[set][5], lru_state[set][6], lru_state[set][7]);
-				// $display(lru_state[set][0]," ",lru_state[set][1]," ",lru_state[set][2]," ",lru_state[set][3]," ",lru_state[set][4]," ", lru_state[set][5]," ",lru_state[set][6]," ",lru_state[set][7]);
-			end
+
 			if (hit) begin
 				hit_count<=hit_count+1;
-				// hit_rate<=(hit_count*100)/access_count;
 				// $display("L1 hit_count %d, access_count %d",hit_count, access_count);
 				if (en) ready<=1;
 				// Handle write enable if applicable
@@ -585,8 +582,7 @@ module DL2cache (clk, reset,
     reg [`DL2waysLog2-1:0] candidate;
             
     genvar j; integer j_;
-    
-    // reg zero_found;        
+           
 
     for (j=0;j<`DL2ways;j=j+1) begin   
    	
@@ -695,8 +691,8 @@ module DL2cache (clk, reset,
 				a = lru_state[set][candidate]; 
 				for (j_ = 0; j_ < `DL2ways; j_ = j_ + 1) begin
 					if (j_ == candidate) begin
-						// $display("previous lru_candidate %d", a);
-						lru_state[set][j_] = 0;  // Immediate update
+						
+						lru_state[set][j_] = 0;
 					end else if (lru_state[set][j_] < a) begin
 						lru_state[set][j_] = lru_state[set][j_] + 1;
 					end
@@ -706,7 +702,6 @@ module DL2cache (clk, reset,
 			
 			if (hit) begin
 				hit_count<=hit_count+1;
-				// hit_rate<=(hit_count*100)/access_count;
 				// $display("L2 hit_count %d, access_count %d",hit_count, access_count);
 				if (`DEB)$display("hit set %d tag %h way %h",set, tag, candidate);
 

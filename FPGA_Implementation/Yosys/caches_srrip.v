@@ -294,7 +294,6 @@ module DL1cache (clk, reset,cycles,
 
 			if (hit) begin
 				hit_count<=hit_count+1;
-				// hit_rate<=(hit_count*100)/access_count;
 				$display("L1 hit_count %d, access_count %d",hit_count, access_count);
 				
 				for (j_ = 0; j_ < `DL1ways; j_ = j_ + 1) begin

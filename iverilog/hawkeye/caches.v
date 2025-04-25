@@ -575,7 +575,6 @@ module DL1cache (clk, reset,cycles,
 
                 if (hit) begin
                     hit_count<=hit_count+1;
-                    // hit_rate<=(hit_count*100)/access_count;
                     $display("L1 hit_count %d, access_count %d",hit_count, access_count);
 
                     if (prediction > 4) begin
@@ -845,17 +844,8 @@ module DL2cache (clk, reset, cycles,
     reg [`DL2waysLog2-1:0] candidate;
             
     genvar j; integer j_;
-    
-   
-
-
-
     reg [4:0] curr_timestep; 
-    
-
-
     reg [`IADDR_bits-1:0] access_pc; 
-    
 
     wire is_sampled_set = 1; 
     reg is_reuse;
@@ -1012,10 +1002,8 @@ module DL2cache (clk, reset, cycles,
 
                 if (should_cache) begin
 					train_up <= 1;
-					// $display("DL2: train_up");
 				end else begin
 					train_down <= 1;
-					// $display("DL2: train_down");
 				end
 
                 if (is_sampled_set) begin

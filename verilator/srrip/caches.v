@@ -539,8 +539,6 @@ module DL1cache (clk, reset,cycles,
 			hit=0; miss=access; zero_found=0;//candidate=0;
 			if (access) begin
 			access_count<=access_count+1;
-			// 	// if (`DEB) 
-			// 	$display("Access");
 			end
 			
 			for (j_=0;j_<`DL1ways;j_=j_+1) begin
@@ -656,7 +654,6 @@ module DL1cache (clk, reset,cycles,
 					en_pending<=0; enB<=0;//waiting<=0;
 					waiting<=dirty[set][candidate]&&valid[set][candidate];
 					wdata<= din; 
-					//nru_bit[set][candidate]<=0;
 					we_local[candidate]<=1; wvalid<=1;
 					//if (en_pending) 
 					if (`DEB)$display("we %h din %h rof %d",we,din, addr[(`VLEN_Log2-3)-1:2]);
@@ -667,7 +664,6 @@ module DL1cache (clk, reset,cycles,
 					
 				wtag<=tag; baddr<=set;				
 				miss_way<=candidate;
-				//nru_bit[set][candidate]<=1;
 			end
 					
 			if (writeback) begin 	
@@ -962,7 +958,6 @@ module DL2cache (clk, reset,
 			
 			if (hit) begin
 				hit_count<=hit_count+1;
-				// hit_rate<=(hit_count*100)/access_count;
 				// $display("L2 hit_count %d, access_count %d",hit_count, access_count);
 				if (`DEB)$display("hit set %d tag %h way %h",set, tag, candidate);
 				

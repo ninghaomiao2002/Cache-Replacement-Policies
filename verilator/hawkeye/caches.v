@@ -527,7 +527,6 @@ module hawkeye_predictor_DL1 (
     assign index = hash(pc);
     integer i;
     always @(posedge clk or posedge reset) begin
-	// always @(posedge access) begin
         if (reset) begin
             for (i = 0; i < `SHCT_SIZE; i = i + 1) begin
                 shct[i] = 3'b100;
@@ -537,7 +536,6 @@ module hawkeye_predictor_DL1 (
             if (train_up && shct[index] > 3'b000) begin
                 shct[index] = shct[index] - 1;
 				prediction = shct[index];
-				// $display("Train up");
             end
             else if (train_down && shct[index] < 3'b111) begin
                 shct[index] = shct[index] + 1;
@@ -574,7 +572,6 @@ module hawkeye_predictor_DL2 (
     assign index = hash(pc);
     integer i;
     always @(posedge clk or posedge reset) begin
-	// always @(posedge access) begin
         if (reset) begin
             for (i = 0; i < `SHCT_SIZE; i = i + 1) begin
                 shct[i] = 3'b100;
@@ -584,7 +581,6 @@ module hawkeye_predictor_DL2 (
             if (train_up && shct[index] > 3'b000) begin
                 shct[index] = shct[index] - 1;
 				prediction = shct[index];
-				// $display("Train up");
             end
             else if (train_down && shct[index] < 3'b111) begin
                 shct[index] = shct[index] + 1;
@@ -863,7 +859,6 @@ module DL1cache (clk, reset,cycles,
 					end
 
 					// $display("tag: ", tag, " found_tag_match: ", found_tag_match, " curr_timestep ", curr_timestep, " last_timestep_for_tag ", last_timestep_for_tag);
-					// $display("tag: ", tag);
 					
 				end
 
@@ -1041,7 +1036,7 @@ module DL1cache (clk, reset,cycles,
 	end	
 	
 	always @(*) begin
-		if (roffset==0) // also case of vectors, where we want the entire block
+		if (roffset==0)
 			dout=load_from_prev_lev? dinB: rdata_updated;
 		else
 			dout=load_from_prev_lev? dinB[32*(roffset+1)-1-:32]:
@@ -1133,24 +1128,12 @@ module DL2cache (clk, reset, cycles,
     reg [`DL2ways-1:0] we_local; reg [`DL2setsLog2-1:0] baddr;
     reg [`DL2setsLog2-1:0] bset;
     reg [`DADDR_bits-1:0] writeback_addr;
-    	
     reg hit;  
     reg miss; 
-    reg [`DL2waysLog2-1:0] candidate;
-            
+    reg [`DL2waysLog2-1:0] candidate;    
     genvar j; integer j_;
-    
-       
-
-
- 
     reg [4:0] curr_timestep; 
-    
-
-
     reg [`IADDR_bits-1:0] access_pc; 
-    
-
     wire is_sampled_set = 1; 
     reg is_reuse;
     wire should_cache;
@@ -1222,7 +1205,6 @@ module DL2cache (clk, reset, cycles,
         .last_timestep(last_timestep_for_tag),
         .is_reuse(is_reuse),
 		.access(access),
-		// .pc(access_pc),
         .should_cache(should_cache)
     );
 
@@ -1306,10 +1288,8 @@ module DL2cache (clk, reset, cycles,
 
                 if (should_cache) begin
 					train_up <= 1;
-					// $display("DL2: train_up");
 				end else begin
 					train_down <= 1;
-					// $display("DL2: train_down");
 				end
 
                 if (is_sampled_set) begin
@@ -1341,7 +1321,6 @@ module DL2cache (clk, reset, cycles,
 
 				if (hit) begin
 					hit_count<=hit_count+1;
-					// hit_rate<=(hit_count*100)/access_count;
 					$display("L2 hit_count %d, access_count %d",hit_count, access_count);
                     
 					if (prediction > 4) begin
@@ -1399,7 +1378,6 @@ module DL2cache (clk, reset, cycles,
 						
 					we_pending_data=din;//<<(addr[(`VLEN_Log2-3)-1:2]*32);				
 					
-					// for writeback
 					read_once<=0; 					
 					doutBstrobe<=0;
 								

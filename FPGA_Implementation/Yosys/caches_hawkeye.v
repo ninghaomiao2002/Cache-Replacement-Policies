@@ -182,7 +182,6 @@ module optgen_DL2
     // (* ram_style = "block" *) 
 	reg [`OCC_WIDTH-1:0] occupancy_vector [`DL2sets-1:0][`VECTOR_SIZE-1:0];
     integer s, q, q_idx;
-    
     genvar j;
     reg [`DL2sets-1:0] we_local;
     reg [`VECTOR_SIZELog2-1:0] baddr;
@@ -196,23 +195,17 @@ module optgen_DL2
 			rdata[j]<=occupancy_vector[j][set];
 		end
 	end
-	
     always @(posedge clk) begin
         if (reset) begin
             for (s = 0; s < `DL2sets; s = s + 1)
                 for (q = 0; q < `VECTOR_SIZE; q = q + 1)
                     occupancy_vector[s][q] = 0;
             should_cache = 1;
-//			interval <= 0;
         end 
 		if (access) begin
-			// $display("last timestep ", last_timestep, " curr_timestep ", curr_timestep, " pc ", pc, " is_reuse ", is_reuse);
 			if (is_reuse) begin
 				should_cache = 1;
 				occupancy_vector[set][curr_timestep] = 0;
-				// interval <= curr_timestep - last_timestep;
-				// $display("%d", interval);
-				// $display("%d %d", last_timestep, curr_timestep);
 				for (q_idx=0; q_idx<`VECTOR_SIZE; q_idx=q_idx+1) begin
 					if (occupancy_vector[set][(curr_timestep-last_timestep+q_idx)% `VECTOR_SIZE]>=`DL1ways) begin
 						should_cache = 0;
@@ -220,8 +213,6 @@ module optgen_DL2
 					end
 				end
 				if (should_cache) begin
-					
-					
 					for (q_idx=0; q_idx<`VECTOR_SIZE; q_idx=q_idx+1) begin
 						if (occupancy_vector[set][(curr_timestep-last_timestep+q_idx)% `VECTOR_SIZE] < `DL1ways) begin
 							occupancy_vector[set][(curr_timestep-last_timestep+q_idx)% `VECTOR_SIZE] = occupancy_vector[set][(curr_timestep-last_timestep+q_idx)% `VECTOR_SIZE] + 1;
@@ -236,9 +227,7 @@ module optgen_DL2
 				// $display("ov not reused");
 			end
 			// $display("DL2: should_cache: ",should_cache, " ", pc);
-			
 		end
-		
     end
 endmodule
 
@@ -251,18 +240,13 @@ module hawkeye_predictor_DL1 (
 	input wire access,
     output reg [2:0] prediction
 );
-
     reg [2:0] shct [0:`SHCT_SIZE-1];
-    
- 
-
     function [7:0] hash;
 		input [`IADDR_bits-1:0] pc;  
 		begin
 			hash = pc[6:0] ^ pc[13:7] ^ pc[20:14];
 		end
 	endfunction
-
     wire [7:0] index;
     assign index = hash(pc);
     integer i;
@@ -286,13 +270,7 @@ module hawkeye_predictor_DL1 (
             end
 			// $display("DL1: prediction: ",prediction, " ", index, " ", pc);
         end
-		// $display("DL1: prediction: ",shct[index][2]);
-		// 
-		// if (access) begin 
-		// $display("DL1: prediction: ",shct[index], " ", index, " ", pc);
-		// end
     end
-    // assign prediction = shct[index];
 endmodule
 
 module hawkeye_predictor_DL2 (
@@ -306,7 +284,6 @@ module hawkeye_predictor_DL2 (
 );
 
     reg [2:0] shct [0:`SHCT_SIZE-1];
-
     function [7:0] hash;
 		input [`IADDR_bits-1:0] pc;  
 		begin
@@ -337,13 +314,7 @@ module hawkeye_predictor_DL2 (
             end
 			// $display("DL2: prediction: ",prediction, " ", index, " ", pc);
         end
-		// $display("DL2: prediction: ",shct[index][2]);
-		// 
-		// if (access) begin 
-		// $display("DL2: prediction: ",shct[index], " ", index, " ", pc);
-		// end
     end
-    // assign prediction = shct[index];
 endmodule
 
 module DL1cache (clk, reset,cycles, 
@@ -420,10 +391,7 @@ module DL1cache (clk, reset,cycles,
     reg [`DL1waysLog2-1:0] candidate; //reg [`DL1waysLog2-1:0] last_candidate;
             
     genvar j; integer j_;
-    
-//    reg zero_found;
-
-	// reg [4:0] last_access_timestep [`DL1sets-1:0][256]; 
+     
     reg [4:0] curr_timestep;  
     reg [`IADDR_bits-1:0] access_pc;
 
@@ -491,9 +459,7 @@ module DL1cache (clk, reset,cycles,
 	reg [61:0] access_count;
 	reg [2:0] max_rrpv;
 	
-	// (* ram_style = "block" *) 
 	reg [`DADDR_bits-(`VLEN_Log2-3)-`DL1setsLog2-1:0] tag_history [`DL1sets-1:0][`VECTOR_SIZE-1:0];
-	// (* ram_style = "block" *) 
 	reg [4:0] timestep_history [`DL1sets-1:0][`VECTOR_SIZE-1:0];
 	reg found_tag_match;
 	reg [4:0] last_timestep_for_tag;
@@ -655,16 +621,11 @@ module DL1cache (clk, reset,cycles,
 						tag_history[set][`VECTOR_SIZE-1] = tag;
 						timestep_history[set][`VECTOR_SIZE-1] = curr_timestep;
 					end
-
-					// $display("tag: ", tag, " found_tag_match: ", found_tag_match, " curr_timestep ", curr_timestep, " last_timestep_for_tag ", last_timestep_for_tag);
-					// $display("tag: ", tag, " found_tag_match: ", found_tag_match, " tag_history: ", tag_history[set][`VECTOR_SIZE-1]," timestep_history: ", timestep_history[set][`VECTOR_SIZE-1], " curr_timestep ", curr_timestep, " last_timestep_for_tag ", last_timestep_for_tag);
-					// $display("tag: ", tag);
 					
 				end
 
                 if (hit) begin
                     hit_count<=hit_count+1;
-                    // hit_rate<=(hit_count*100)/access_count;
                     // $display("L1 hit_count %d, access_count %d",hit_count, access_count);
 
                     if (prediction > 4) begin
@@ -934,24 +895,12 @@ module DL2cache (clk, reset, cycles,
     reg [`DL2ways-1:0] we_local; reg [`DL2setsLog2-1:0] baddr;
     reg [`DL2setsLog2-1:0] bset;
     reg [`DADDR_bits-1:0] writeback_addr;
-    	
     reg hit;  
     reg miss; 
-    reg [`DL2waysLog2-1:0] candidate;
-            
+    reg [`DL2waysLog2-1:0] candidate;  
     genvar j; integer j_;
-    
-//    reg zero_found;        
-
-
-    // reg [4:0] last_access_timestep [`DL2sets-1:0][256]; 
     reg [4:0] curr_timestep; 
-    
-
-    // reg [63:0] last_pc [`DL2sets-1:0][`DL2ways-1:0]; 
     reg [`IADDR_bits-1:0] access_pc; 
-    
-
     wire is_sampled_set = 1; 
     reg is_reuse;
     wire should_cache;
@@ -1020,17 +969,11 @@ module DL2cache (clk, reset, cycles,
 	reg hitw_saved;	
 	reg [61:0] hit_count;
 	reg [61:0] access_count;
-//	reg found_victim;
 	reg [2:0] max_rrpv;
-	// (* ram_style = "block" *) 
 	reg [`DADDR_bits-(`VLEN_Log2-3)-`DL2setsLog2-1:0] tag_history [`DL2sets-1:0][`VECTOR_SIZE-1:0];
-	// (* ram_style = "block" *) 
 	reg [4:0] timestep_history [`DL2sets-1:0][`VECTOR_SIZE-1:0];
-//	integer h;
 	reg found_tag_match;
 	reg [4:0] last_timestep_for_tag;
-	// reg [`DADDR_bits-(`VLEN_Log2-3)-`DL2setsLog2-1:0] last_access_tag [`DL2sets-1:0][256];
-	
     reg [`DL2sets-1:0] we_localth;
     reg [`VECTOR_SIZELog2-1:0] baddrth;
     reg [`DADDR_bits-(`VLEN_Log2-3)-`DL2setsLog2-1:0] wdatath;
@@ -1179,16 +1122,11 @@ module DL2cache (clk, reset, cycles,
 						tag_history[set][`VECTOR_SIZE-1] = tag;
 						timestep_history[set][`VECTOR_SIZE-1] = curr_timestep;
 					end
-
-					// $display("tag: ", tag, " found_tag_match: ", found_tag_match, " curr_timestep ", curr_timestep, " last_timestep_for_tag ", last_timestep_for_tag);
-					// $display("tag: ", tag, " found_tag_match: ", found_tag_match, " tag_history: ", tag_history[set][`VECTOR_SIZE-1]," timestep_history: ", timestep_history[set][`VECTOR_SIZE-1], " curr_timestep ", curr_timestep, " last_timestep_for_tag ", last_timestep_for_tag);
-					// $display("tag: ", tag);
 					
 				end
 
 				if (hit) begin
 					hit_count<=hit_count+1;
-					// hit_rate<=(hit_count*100)/access_count;
 					// $display("L2 hit_count %d, access_count %d",hit_count, access_count);
                     
 					if (prediction > 4) begin

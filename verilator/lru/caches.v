@@ -454,19 +454,11 @@ module DL1cache (clk, reset,cycles,
     
     reg [`DL1ways-1:0] we_local; reg [`DL1setsLog2-1:0] baddr;
     reg [`DL1setsLog2-1:0] bset;
-    
-    reg [`DADDR_bits-1:0] writeback_addr;
-	//wire hitw;  assign hitw = (wtag==tag_real) && (set_real==baddr) && wvalid;
-	//wire hitw2;  assign hitw2 = (wtag==writeback_addr[`DADDR_bits-1:`DL1setsLog2+`VLEN_Log2-3]) && (writeback_addr[`DL1setsLog2+`VLEN_Log2-3-1:`VLEN_Log2-3]==baddr) && wvalid;	
-	
+    reg [`DADDR_bits-1:0] writeback_addr;	
     reg hit;  
     reg miss; 
-    reg [`DL1waysLog2-1:0] candidate; //reg [`DL1waysLog2-1:0] last_candidate;
-            
+    reg [`DL1waysLog2-1:0] candidate; //reg [`DL1waysLog2-1:0] last_candidate;     
     genvar j; integer j_;
-    
-    // reg zero_found;
-
     
     for (j=0;j<`DL1ways;j=j+1) begin   
    	
@@ -530,7 +522,6 @@ module DL1cache (clk, reset,cycles,
 
 
 	always @( posedge clk ) begin
-		// $display("waiting %d", waiting);
 		if (reset) begin
 			// $display("reset %d", reset); 
 				for (i = 0; i < `DL1sets; i = i + 1) begin
@@ -561,7 +552,6 @@ module DL1cache (clk, reset,cycles,
 			if (en) roffset<=addr[(`VLEN_Log2-3)-1:2];	
 			
 			hit=0; miss=access; 
-			// zero_found=0;
 			if (access) begin
 				access_count<=access_count+1;
 			end
@@ -572,13 +562,11 @@ module DL1cache (clk, reset,cycles,
 					candidate=j_;
 					miss=0;
 				end
-				if (access && (lru_state[set][j_]==`DL1LRUMAX) && /*(!zero_found) &&*/ (!hit)) begin
+				if (access && (lru_state[set][j_]==`DL1LRUMAX) && (!hit)) begin
 					candidate=j_;
-					// zero_found=1;
 				end
 			end
 
-			// $display(`DL1LRUMAX);
 			if (access) begin
 				a = lru_state[set][candidate]; 
 				for (j_ = 0; j_ < `DL1ways; j_ = j_ + 1) begin
@@ -591,10 +579,8 @@ module DL1cache (clk, reset,cycles,
 			end
 			if (hit) begin
 				hit_count<=hit_count+1;
-				// hit_rate<=(hit_count*100)/access_count;
 				// $display("L1 hit_count %d, access_count %d",hit_count, access_count);
 				if (en) ready<=1;
-				// Handle write enable if applicable
 				if (we!=0) begin 
 					//baddr<=bset;
 					we_pending<=(last_set!=set) && !hitw;
@@ -672,12 +658,11 @@ module DL1cache (clk, reset,cycles,
 					
 				wtag<=tag; baddr<=set;
 				miss_way<=candidate;
-				//nru_bit[set][candidate]<=1;
 			end
 					
 			if (writeback) begin 	
 				if (read_once) 
-					doutB<=rdata[miss_way];//_updated;
+					doutB<=rdata[miss_way];
 				read_once<=0;
 				//$display("%h %h %h %b %h",rdata,wdata, rdata_updated,acceptingB, tag);
 				if (acceptingB)	begin
@@ -720,8 +705,8 @@ module DL1cache (clk, reset,cycles,
 			
 			if (flush_out) begin flushing<=0; flush_out<=0; end 
 									
-			if (en_pending && acceptingB) begin // diff addr in MAXI?
-				enB<=1; addrB<=en_pending_addr; //waddrh<=en_pending_addr;
+			if (en_pending && acceptingB) begin
+				enB<=1; addrB<=en_pending_addr;
 				en_pending<=0;
 			end
 			
@@ -792,7 +777,6 @@ module DL2cache (clk, reset,
 	reg [`DADDR_bits-(`DL2block_Log2-3)-`DL2setsLog2-1:0] tag_array [`DL2sets-1:0][`DL2ways-1:0];
     reg [`DL2ways-1:0] dirty [`DL2sets-1:0];
     reg [`DL2ways-1:0] valid [`DL2sets-1:0];
-    // reg [`DL2ways-1:0] nru_bit [`DL2sets-1:0];
 	reg [`DL2waysLog2-1:0] lru_state [`DL2sets-1:0][`DL2ways-1:0];
 
     wire [`DADDR_bits-(`DL2block_Log2-3)-`DL2setsLog2-1:0] tag; 
@@ -906,10 +890,9 @@ module DL2cache (clk, reset,
 				valid[i]<=0;
 				for (j_ = 0; j_ < `DL2ways; j_ = j_ + 1) 
 				begin
-                		lru_state[i][j_] <= j_;
-						// $display("set %d way %d lru %2b", i, j_, lru_state[i][j_]);
+                	lru_state[i][j_] <= j_;
+					// $display("set %d way %d lru %2b", i, j_, lru_state[i][j_]);
 				end
-				//tag_array[i]<=0;
 			end
 			en_pending<=0; we_pending<=0;
 			roffset<=0;	
@@ -934,16 +917,14 @@ module DL2cache (clk, reset,
 			
 			
 			hit=0; miss=access; 
-			// zero_found=0;
 			for (j_=0;j_<`DL2ways;j_=j_+1) begin
 				if (access && ((tag_array[set][j_]==tag) && valid[set][j_])) begin
 					hit=1;
 					candidate=j_;
 					miss=0;
 				end
-				if (access && (lru_state[set][j_]==`DL2LRUMAX) /*&&(!zero_found)*/ && (!hit)) begin
+				if (access && (lru_state[set][j_]==`DL2LRUMAX) && (!hit)) begin
 					candidate=j_;
-					// zero_found=1;
 				end
 			end	
 			
@@ -955,7 +936,7 @@ module DL2cache (clk, reset,
 				for (j_ = 0; j_ < `DL2ways; j_ = j_ + 1) begin
 					if (j_ == candidate) begin
 						// $display("previous lru_candidate %d", a);
-						lru_state[set][j_] = 0;  // Immediate update
+						lru_state[set][j_] = 0;
 					end else if (lru_state[set][j_] < a) begin
 						lru_state[set][j_] = lru_state[set][j_] + 1;
 					end
@@ -964,7 +945,6 @@ module DL2cache (clk, reset,
 			
 			if (hit) begin
 				hit_count<=hit_count+1;
-				// hit_rate<=(hit_count*100)/access_count;
 				// $display("L2 hit_count %d, access_count %d",hit_count, access_count);
 				if (`DEB)$display("hit set %d tag %h way %h",set, tag, candidate);
 				
@@ -1095,7 +1075,7 @@ module DL2cache (clk, reset,
 			
 			if (flush_out) begin flushing<=0; flush_out<=0; end 
 			
-			if (en_pending && accR && (accW||from_writeback)) begin // diff addr in MAXI?
+			if (en_pending && accR && (accW||from_writeback)) begin
 				enB<=1; addrB<=en_pending_addr; //waddrh<=en_pending_addr;
 				en_pending<=0;
 			end
@@ -1114,7 +1094,6 @@ module DL2cache (clk, reset,
 					 (!waiting_en) && (dinBstrobe==waiting_en_strobe)
 					 )?
 						we_pending_data/*[(i+1)*8-1-:8]*/: dinB[`VLEN*(i+1)-1-:`VLEN];
-				//nru_bit[addrB[`DL2block_Log2-3+`DL2setsLog2-1:`DL2block_Log2-3]][miss_way]<=0;
 			end
 		end		
 	end
